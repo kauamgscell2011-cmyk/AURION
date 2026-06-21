@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AURION — Estúdio de Animes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   AURION — DESIGN SYSTEM
+   Paleta: Universo / Criatividade / Imaginação
+══════════════════════════════════════════ */
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+:root {
+  /* Nova paleta — universo noturno (dark mode padrão) */
+  --bg:        #05061a;
+  --bg2:       #080920;
+  --surface:   #0d0f2a;
+  --surface2:  #131530;
+  --surface3:  #1a1c3a;
+  --border:    rgba(109,40,217,0.2);
+  --border2:   rgba(34,211,238,0.25);
+  --purple:    #6d28d9;
+  --purple2:   #8b5cf6;
+  --purple-soft: rgba(109,40,217,0.15);
+  --cyan:      #22d3ee;
+  --cyan-soft: rgba(34,211,238,0.1);
+  --gold:      #f59e0b;
+  --gold-soft: rgba(245,158,11,0.1);
+  --white:     #f0f4ff;
+  --muted:     #6b7280;
+  --muted2:    #374151;
+  --green:     #10b981;
+  --red:       #ef4444;
+  --sidebar: 240px;
+}
+
+/* ══ LIGHT MODE ══ */
+body.light {
+  --bg:        #f4f6ff;
+  --bg2:       #eef0fa;
+  --surface:   #ffffff;
+  --surface2:  #f0f2fc;
+  --surface3:  #e8eaf8;
+  --border:    rgba(109,40,217,0.15);
+  --border2:   rgba(34,211,238,0.3);
+  --purple:    #6d28d9;
+  --purple2:   #7c3aed;
+  --purple-soft: rgba(109,40,217,0.08);
+  --cyan:      #0891b2;
+  --cyan-soft: rgba(8,145,178,0.08);
+  --gold:      #d97706;
+  --gold-soft: rgba(217,119,6,0.08);
+  --white:     #1e1b4b;
+  --muted:     #6b7280;
+  --muted2:    #9ca3af;
+  --green:     #059669;
+  --red:       #dc2626;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  width:36px; height:36px;
+  background:var(--surface2); border:1px solid var(--border); border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.15s; flex-shrink:0; font-size:1rem;
+}
+.theme-toggle:active, .theme-toggle:hover { background:var(--purple-soft); border-color:var(--border2); }
+
+/* Inline project name editing */
+.sproj-name-input {
+  background:transparent; border:none; outline:none;
+  color:var(--white); font-size:0.82rem; font-weight:600;
+  font-family:'DM Sans',sans-serif; width:100%;
+  border-bottom:1px solid var(--border2);
+  padding-bottom:2px;
+}
+
+/* Project name edit icon */
+.sproj-edit {
+  opacity:0; transition:opacity 0.15s;
+  font-size:0.7rem; color:var(--muted); cursor:pointer; flex-shrink:0;
+}
+.sproj-item:hover .sproj-edit { opacity:1; }
+
+html, body { height:100%; background:var(--bg); color:var(--white); font-family:'DM Sans',sans-serif; overflow:hidden; }
+
+/* ══ SPLASH SCREEN ══ */
+#splash {
+  position:fixed; inset:0; z-index:1000;
+  background:var(--bg);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:0;
+}
+
+.splash-stars {
+  position:absolute; inset:0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 50% 50%, rgba(34,211,238,0.3) 0%, transparent 100%),
+    radial-gradient(2px 2px at 30% 40%, rgba(109,40,217,0.4) 0%, transparent 100%);
+  animation: twinkle 4s ease infinite alternate;
+}
+
+.splash-glow {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(109,40,217,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 30% at 30% 70%, rgba(34,211,238,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 70% 30%, rgba(245,158,11,0.06) 0%, transparent 60%);
+}
+
+.splash-logo-wrap {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  animation: splashIn 1s ease both;
+}
+
+.splash-icon {
+  width:80px; height:80px;
+  background:linear-gradient(135deg, var(--purple), var(--cyan));
+  border-radius:20px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.2rem;
+  box-shadow: 0 0 40px rgba(109,40,217,0.5), 0 0 80px rgba(34,211,238,0.2);
+  margin-bottom:8px;
+}
+
+.splash-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:5rem; letter-spacing:0.3em;
+  background:linear-gradient(135deg, var(--white) 0%, var(--cyan) 50%, var(--gold) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  line-height:1;
+}
+
+.splash-tagline {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--muted); margin-top:4px;
+}
+
+.splash-bar {
+  position:relative; z-index:2;
+  width:200px; height:2px; background:var(--surface2);
+  border-radius:2px; margin-top:48px;
+  overflow:hidden;
+  animation: splashIn 1s ease 0.3s both;
+}
+
+.splash-bar-fill {
+  height:100%; width:0;
+  background:linear-gradient(90deg, var(--purple), var(--cyan));
+  border-radius:2px;
+  animation: loadBar 2s ease 0.5s forwards;
+}
+
+.splash-status {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--muted); margin-top:10px; z-index:2;
+  animation: splashIn 1s ease 0.5s both;
+}
+
+/* ══ APP SHELL ══ */
+#app {
+  display:none;
+  height:100%;
+  flex-direction:column;
+}
+
+#app.ready { display:flex; }
+
+/* ══ TOP BAR ══ */
+.topbar {
+  height:52px; flex-shrink:0;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center;
+  padding:0 16px; gap:12px;
+  position:relative; z-index:20;
+}
+
+.topbar-logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem; letter-spacing:0.25em;
+  background:linear-gradient(135deg, var(--cyan), var(--purple2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  flex-shrink:0;
+}
+
+.topbar-project {
+  flex:1; min-width:0;
+  display:flex; align-items:center; gap:8px;
+}
+
+.topbar-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--cyan); flex-shrink:0;
+  animation:glow 2s ease infinite;
+}
+
+.topbar-pname {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.7rem; color:var(--muted);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+.topbar-actions {
+  display:flex; gap:6px; flex-shrink:0;
+}
+
+.icon-btn {
+  width:36px; height:36px;
+  background:var(--surface2); border:1px solid var(--border); border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.15s; flex-shrink:0;
+}
+.icon-btn:active, .icon-btn:hover { background:var(--purple-soft); border-color:var(--border2); }
+.icon-btn svg { width:16px; height:16px; stroke:var(--muted); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ══ BODY LAYOUT ══ */
+.body-layout {
+  flex:1; display:flex; overflow:hidden;
+}
+
+/* ══ SIDEBAR ══ */
+.sidebar {
+  width:var(--sidebar); flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+  transition:width 0.25s ease, transform 0.25s ease;
+}
+
+.sidebar.collapsed { width:52px; }
+
+/* Mobile: sidebar becomes overlay */
+@media (max-width:768px) {
+  :root { --sidebar:280px; }
+  .sidebar {
+    position:fixed; top:52px; left:0; bottom:0;
+    z-index:30; transform:translateX(-100%);
+    width:var(--sidebar) !important;
+  }
+  .sidebar.open { transform:translateX(0); }
+  .sidebar-overlay {
+    position:fixed; inset:0; top:52px;
+    background:rgba(0,0,0,0.6); backdrop-filter:blur(4px);
+    z-index:29; opacity:0; pointer-events:none; transition:opacity 0.25s;
+  }
+  .sidebar-overlay.open { opacity:1; pointer-events:all; }
+}
+
+.sidebar-section-label {
+  padding:14px 16px 6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--muted2); flex-shrink:0;
+}
+
+.sidebar-projects {
+  flex:1; overflow-y:auto; padding:4px 8px;
+  scrollbar-width:none;
+}
+.sidebar-projects::-webkit-scrollbar { display:none; }
+
+.sproj-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 10px; border-radius:8px; cursor:pointer;
+  transition:all 0.15s; margin-bottom:2px;
+}
+.sproj-item:hover { background:var(--purple-soft); }
+.sproj-item.active { background:var(--purple-soft); border-left:2px solid var(--cyan); }
+
+.sproj-icon {
+  width:32px; height:32px; border-radius:8px; flex-shrink:0;
+  background:linear-gradient(135deg, var(--purple), var(--cyan));
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.9rem;
+}
+
+.sproj-info { flex:1; min-width:0; }
+.sproj-name { font-size:0.82rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sproj-stage { font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:var(--cyan); }
+
+.sidebar-footer {
+  padding:8px; border-top:1px solid var(--border); flex-shrink:0;
+}
+
+.new-proj-btn {
+  width:100%; padding:10px; border-radius:8px;
+  background:transparent; border:1px dashed rgba(109,40,217,0.4);
+  color:var(--muted); font-size:0.78rem; font-family:'DM Sans',sans-serif;
+  cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:8px; justify-content:center;
+}
+.new-proj-btn:hover { background:var(--purple-soft); color:var(--white); border-color:var(--purple2); }
+
+/* ══ MAIN CONTENT ══ */
+.main-content {
+  flex:1; display:flex; flex-direction:column; overflow:hidden;
+  background:var(--bg);
+}
+
+/* ══ WORKSPACE TABS ══ */
+.workspace-tabs {
+  display:flex; align-items:center;
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:0 16px; gap:2px; flex-shrink:0;
+  overflow-x:auto; scrollbar-width:none;
+}
+.workspace-tabs::-webkit-scrollbar { display:none; }
+
+.wtab {
+  display:flex; align-items:center; gap:7px;
+  padding:0 14px; height:42px; flex-shrink:0;
+  font-size:0.8rem; color:var(--muted);
+  cursor:pointer; border-bottom:2px solid transparent;
+  transition:all 0.15s; white-space:nowrap;
+}
+.wtab:hover { color:var(--white); }
+.wtab.active { color:var(--cyan); border-bottom-color:var(--cyan); }
+.wtab.locked { opacity:0.35; cursor:not-allowed; }
+.wtab-icon { font-size:0.9rem; }
+
+/* ══ TAB PANELS ══ */
+.tab-panel { display:none; flex:1; flex-direction:column; overflow:hidden; }
+.tab-panel.active { display:flex; }
+
+/* ══ HOME PANEL ══ */
+.home-panel {
+  flex:1; overflow-y:auto; padding:32px;
+  display:flex; flex-direction:column; gap:24px;
+  scrollbar-width:none;
+}
+.home-panel::-webkit-scrollbar { display:none; }
+
+.home-welcome {
+  display:flex; flex-direction:column; gap:8px;
+}
+
+.home-welcome-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.5rem; letter-spacing:0.05em;
+  background:linear-gradient(135deg, var(--white), var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+.home-welcome-sub { font-size:0.9rem; color:var(--muted); line-height:1.6; }
+
+.home-cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+  gap:12px;
+}
+
+.home-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:20px; cursor:pointer;
+  transition:all 0.2s; position:relative; overflow:hidden;
+}
+.home-card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(109,40,217,0.05), rgba(34,211,238,0.05));
+  opacity:0; transition:opacity 0.2s;
+}
+.home-card:hover { border-color:var(--border2); transform:translateY(-2px); }
+.home-card:hover::before { opacity:1; }
+
+.home-card-icon { font-size:1.8rem; margin-bottom:10px; }
+.home-card-name { font-size:0.9rem; font-weight:600; color:var(--white); margin-bottom:4px; }
+.home-card-desc { font-size:0.75rem; color:var(--muted); line-height:1.5; }
+.home-card-badge {
+  display:inline-block; margin-top:10px;
+  font-family:'JetBrains Mono',monospace; font-size:0.55rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  padding:3px 8px; border-radius:6px;
+}
+.home-card-badge.active { background:var(--cyan-soft); color:var(--cyan); }
+.home-card-badge.soon { background:var(--surface2); color:var(--muted2); }
+.home-card-badge.done { background:rgba(16,185,129,0.1); color:var(--green); }
+
+/* ══ CHAT PANEL ══ */
+.chat-split {
+  flex:1; display:flex; overflow:hidden;
+}
+
+.chat-col {
+  flex:1; display:flex; flex-direction:column; overflow:hidden;
+}
+
+/* Character form sidebar — shows on desktop */
+.char-sidebar {
+  width:280px; flex-shrink:0;
+  background:var(--surface); border-left:1px solid var(--border);
+  display:flex; flex-direction:column; overflow-y:auto;
+  scrollbar-width:none;
+}
+.char-sidebar::-webkit-scrollbar { display:none; }
+
+@media (max-width:900px) {
+  .char-sidebar { display:none; }
+  .char-form-mobile { display:block !important; }
+}
+
+.char-form-mobile {
+  display:none;
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:12px 16px; flex-shrink:0;
+}
+
+.csb-header {
+  padding:16px; border-bottom:1px solid var(--border); flex-shrink:0;
+  font-family:'JetBrains Mono',monospace; font-size:0.6rem;
+  letter-spacing:0.25em; text-transform:uppercase; color:var(--cyan);
+}
+
+.csb-body { padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+
+.csb-char-tabs {
+  display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px;
+}
+
+.csb-char-pill {
+  padding:5px 12px; border-radius:12px; cursor:pointer;
+  font-size:0.75rem; transition:all 0.15s;
+  background:var(--surface2); border:1px solid var(--border); color:var(--muted);
+}
+.csb-char-pill.active { background:var(--purple-soft); border-color:var(--purple2); color:var(--white); }
+
+.field-label {
+  font-family:'JetBrains Mono',monospace; font-size:0.55rem;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--muted2); margin-bottom:3px;
+}
+
+.aurion-input {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:9px 12px; color:var(--white);
+  font-family:'DM Sans',sans-serif; font-size:0.82rem;
+  outline:none; width:100%; transition:border-color 0.2s;
+}
+.aurion-input:focus { border-color:var(--border2); }
+.aurion-input::placeholder { color:var(--muted2); }
+
+.aurion-textarea {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:9px 12px; color:var(--white);
+  font-family:'DM Sans',sans-serif; font-size:0.82rem;
+  outline:none; width:100%; resize:none; min-height:60px;
+  transition:border-color 0.2s;
+}
+.aurion-textarea:focus { border-color:var(--border2); }
+.aurion-textarea::placeholder { color:var(--muted2); }
+
+.save-char-btn {
+  width:100%; padding:10px; background:var(--purple); border:none; border-radius:8px;
+  color:white; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.15s;
+}
+.save-char-btn:active { background:#5b21b6; transform:scale(0.98); }
+
+/* ══ CHAT MESSAGES ══ */
+.chat-area {
+  flex:1; overflow-y:auto; padding:20px;
+  display:flex; flex-direction:column; gap:14px;
+  scrollbar-width:thin; scrollbar-color:var(--border) transparent;
+}
+
+.welcome-chat {
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; text-align:center;
+  gap:14px; padding:40px 20px; flex:1; min-height:250px;
+}
+
+.welcome-chat-icon { font-size:2.5rem; }
+.welcome-chat-title { font-size:1.1rem; font-weight:700; color:var(--white); }
+.welcome-chat-sub { font-size:0.85rem; color:var(--muted); line-height:1.65; max-width:300px; }
+
+.chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+
+.chip {
+  padding:8px 14px; background:var(--surface2); border:1px solid var(--border);
+  border-radius:20px; font-size:0.78rem; color:var(--muted);
+  cursor:pointer; transition:all 0.15s; user-select:none;
+}
+.chip:hover { background:var(--purple-soft); border-color:var(--border2); color:var(--white); }
+.chip:active { transform:scale(0.97); }
+
+.mgroup { display:flex; flex-direction:column; gap:4px; animation:fadeUp 0.25s ease; }
+.mgroup.user { align-items:flex-end; }
+.mgroup.aurion { align-items:flex-start; }
+
+.msender {
+  font-family:'JetBrains Mono',monospace; font-size:0.55rem;
+  letter-spacing:0.15em; text-transform:uppercase; padding:0 4px;
+}
+.mgroup.user .msender { color:var(--gold); }
+.mgroup.aurion .msender { color:var(--cyan); }
+
+.mbubble {
+  max-width:min(88%, 560px); padding:12px 15px;
+  font-size:0.87rem; line-height:1.65; border-radius:4px;
+}
+.mgroup.user .mbubble {
+  background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.18);
+  border-bottom-right-radius:0;
+}
+.mgroup.aurion .mbubble {
+  background:var(--surface); border:1px solid var(--border);
+  border-bottom-left-radius:0;
+}
+
+.typing-b {
+  display:flex; gap:5px; align-items:center;
+  padding:12px 15px; background:var(--surface);
+  border:1px solid var(--border); border-radius:4px;
+  border-bottom-left-radius:0; width:fit-content;
+}
+.tdot { width:7px; height:7px; border-radius:50%; background:var(--cyan); animation:bounce 1.2s ease infinite; }
+.tdot:nth-child(2) { animation-delay:0.15s; }
+.tdot:nth-child(3) { animation-delay:0.3s; }
+
+.chat-input-zone {
+  padding:12px 16px env(safe-area-inset-bottom,12px);
+  background:var(--surface); border-top:1px solid var(--border); flex-shrink:0;
+}
+
+.chat-irow {
+  display:flex; align-items:flex-end; gap:10px;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:12px; padding:10px 10px 10px 16px;
+  transition:border-color 0.2s;
+}
+.chat-irow:focus-within { border-color:var(--border2); }
+
+.chat-irow textarea {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--white); font-family:'DM Sans',sans-serif;
+  font-size:0.9rem; line-height:1.5; resize:none;
+  min-height:24px; max-height:100px;
+}
+.chat-irow textarea::placeholder { color:var(--muted2); }
+
+.send-btn {
+  width:38px; height:38px; background:var(--purple); border:none; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0; transition:all 0.15s;
+}
+.send-btn:active { background:#5b21b6; transform:scale(0.92); }
+.send-btn:disabled { background:var(--muted2); opacity:0.5; }
+.send-btn svg { width:16px; height:16px; fill:none; stroke:white; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ══ VISUAL TAB ══ */
+.visual-panel {
+  flex:1; overflow-y:auto; padding:20px;
+  display:flex; flex-direction:column; gap:16px;
+  scrollbar-width:thin; scrollbar-color:var(--border) transparent;
+}
+
+/* Desktop: side by side */
+@media (min-width:900px) {
+  .visual-desktop {
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:20px; align-items:start;
+  }
+}
+
+.vsec-label {
+  font-family:'JetBrains Mono',monospace; font-size:0.55rem;
+  letter-spacing:0.3em; text-transform:uppercase; color:var(--muted2); margin-bottom:6px;
+}
+
+.char-selector { display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+.char-selector::-webkit-scrollbar { display:none; }
+.char-pill {
+  display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:20px; flex-shrink:0;
+  background:var(--surface2); border:1px solid var(--border); cursor:pointer; transition:all 0.15s;
+  font-size:0.8rem; color:var(--muted);
+}
+.char-pill.active { background:var(--purple-soft); border-color:var(--purple2); color:var(--white); }
+
+.style-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.style-card {
+  padding:12px 8px; background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; text-align:center; cursor:pointer; transition:all 0.15s;
+}
+.style-card.active { background:var(--cyan-soft); border-color:var(--border2); }
+.style-card:active { transform:scale(0.97); }
+.style-card-icon { font-size:1.3rem; margin-bottom:4px; }
+.style-card-name { font-size:0.66rem; color:var(--muted); }
+.style-card.active .style-card-name { color:var(--cyan); }
+
+.view-tabs { display:flex; gap:6px; }
+.view-tab {
+  flex:1; padding:9px; text-align:center;
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  font-size:0.75rem; color:var(--muted); cursor:pointer; transition:all 0.15s;
+}
+.view-tab.active { background:var(--cyan-soft); border-color:var(--border2); color:var(--cyan); }
+
+.gen-btn {
+  width:100%; padding:13px; background:linear-gradient(135deg, var(--purple), var(--cyan));
+  border:none; border-radius:12px; color:white;
+  font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:600;
+  cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.gen-btn:active { opacity:0.85; transform:scale(0.98); }
+.gen-btn:disabled { background:var(--muted2); opacity:0.5; cursor:not-allowed; transform:none; }
+
+.image-frame {
+  background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+  overflow:hidden; min-height:300px; display:flex; align-items:center; justify-content:center;
+}
+.image-frame img { width:100%; height:auto; display:block; }
+.image-placeholder { display:flex; flex-direction:column; align-items:center; gap:10px; padding:48px 24px; color:var(--muted2); text-align:center; }
+.image-placeholder-icon { font-size:2.5rem; }
+.image-placeholder-text { font-size:0.78rem; line-height:1.6; }
+.image-loading { display:flex; flex-direction:column; align-items:center; gap:12px; padding:48px 24px; }
+.image-loading-spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--cyan); border-radius:50%; animation:spin 0.8s linear infinite; }
+.image-loading-text { font-size:0.78rem; color:var(--muted); text-align:center; line-height:1.6; }
+
+.ficha-tabs { display:flex; gap:6px; margin-bottom:12px; }
+.ficha-tab { flex:1; padding:8px; text-align:center; background:var(--surface2); border:1px solid var(--border); border-radius:8px; font-size:0.75rem; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.ficha-tab.active { background:var(--cyan-soft); border-color:var(--border2); color:var(--cyan); }
+
+.prompt-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+.prompt-box-label { font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--cyan); margin-bottom:6px; }
+.prompt-box textarea { width:100%; background:transparent; border:none; outline:none; color:var(--muted); font-size:0.72rem; line-height:1.5; resize:none; font-family:'JetBrains Mono',monospace; min-height:56px; }
+
+/* ══ AUDIO TAB ══ */
+.audio-panel {
+  flex:1; overflow-y:auto; padding:20px;
+  display:flex; flex-direction:column; gap:16px;
+  scrollbar-width:thin; scrollbar-color:var(--border) transparent;
+}
+
+.audio-type-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+
+@media (min-width:900px) {
+  .audio-type-grid { grid-template-columns:repeat(4,1fr); }
+}
+
+.audio-type-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px; cursor:pointer; transition:all 0.2s; text-align:center;
+}
+.audio-type-card.active { background:var(--cyan-soft); border-color:var(--border2); }
+.audio-type-card:hover { border-color:var(--border2); }
+.audio-type-icon { font-size:1.8rem; margin-bottom:8px; }
+.audio-type-name { font-size:0.82rem; font-weight:600; color:var(--white); margin-bottom:3px; }
+.audio-type-desc { font-size:0.7rem; color:var(--muted); }
+
+.audio-style-row { display:flex; flex-wrap:wrap; gap:8px; }
+.audio-style-chip {
+  padding:7px 14px; border-radius:20px; cursor:pointer; font-size:0.78rem;
+  background:var(--surface2); border:1px solid var(--border); color:var(--muted); transition:all 0.15s;
+}
+.audio-style-chip.active { background:var(--purple-soft); border-color:var(--purple2); color:var(--white); }
+
+.audio-desc-box { display:flex; flex-direction:column; gap:6px; }
+
+.audio-gen-btn {
+  width:100%; padding:14px;
+  background:linear-gradient(135deg, var(--purple), #1d4ed8);
+  border:none; border-radius:12px; color:white;
+  font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:600;
+  cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.audio-gen-btn:active { opacity:0.85; transform:scale(0.98); }
+.audio-gen-btn:disabled { background:var(--muted2); opacity:0.5; cursor:not-allowed; }
+
+.audio-result {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px; display:flex; flex-direction:column; gap:12px;
+}
+.audio-result-header { display:flex; align-items:center; gap:10px; }
+.audio-result-icon {
+  width:44px; height:44px; border-radius:10px;
+  background:linear-gradient(135deg, var(--purple), #1d4ed8);
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;
+}
+.audio-result-info { flex:1; min-width:0; }
+.audio-result-name { font-size:0.88rem; font-weight:600; color:var(--white); }
+.audio-result-meta { font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--muted); }
+
+audio { width:100%; border-radius:8px; outline:none; }
+audio::-webkit-media-controls-panel { background:var(--surface2); }
+
+.audio-placeholder {
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:40px 24px; color:var(--muted2); text-align:center;
+}
+.audio-placeholder-icon { font-size:2.5rem; }
+.audio-placeholder-text { font-size:0.78rem; line-height:1.6; }
+.audio-tracks { display:flex; flex-direction:column; gap:8px; }
+
+/* ══ DRAWER ══ */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:50; opacity:0; pointer-events:none; transition:opacity 0.25s; backdrop-filter:blur(4px); }
+.overlay.open { opacity:1; pointer-events:all; }
+.drawer { position:fixed; top:0; right:0; bottom:0; width:min(300px,88vw); background:var(--surface); border-left:1px solid var(--border); z-index:51; transform:translateX(100%); transition:transform 0.28s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; overflow-y:auto; }
+.drawer.open { transform:translateX(0); }
+.dhead { display:flex; align-items:center; justify-content:space-between; padding:18px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.dtitle { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.15em; color:var(--gold); }
+.xbtn { width:32px; height:32px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.xbtn svg { width:15px; height:15px; stroke:var(--muted); fill:none; stroke-width:2; stroke-linecap:round; }
+.dsec { padding:16px 18px; border-bottom:1px solid var(--border); }
+.dsec-title { font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--cyan); margin-bottom:12px; }
+.sselect { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:var(--white); font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; width:100%; cursor:pointer; -webkit-appearance:none; }
+.save-btn { width:100%; padding:10px; background:var(--purple); border:none; border-radius:8px; color:white; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.15s; margin-top:10px; }
+.save-btn:active { opacity:0.85; }
+
+/* ══ TOAST ══ */
+.toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--surface2); border:1px solid var(--border2); padding:10px 18px; border-radius:20px; font-size:0.78rem; color:var(--white); opacity:0; transition:all 0.22s; pointer-events:none; white-space:nowrap; z-index:200; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ══ ANIMATIONS ══ */
+@keyframes twinkle { from{opacity:0.6;} to{opacity:1;} }
+@keyframes splashIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+@keyframes loadBar { from{width:0;} to{width:100%;} }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 6px var(--cyan);}50%{opacity:0.5;box-shadow:none;} }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+@keyframes spin { to{transform:rotate(360deg);} }
+</style>
+</head>
+<body>
+
+<!-- ══ SPLASH SCREEN ══ -->
+<div id="splash">
+  <div class="splash-stars"></div>
+  <div class="splash-glow"></div>
+  <div class="splash-logo-wrap">
+    <div class="splash-icon">✦</div>
+    <div class="splash-title">AURION</div>
+    <div class="splash-tagline">// Estúdio de Criação de Animes</div>
+  </div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  <div class="splash-status" id="splashStatus">Inicializando universo...</div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">AURION</div>
+    <div class="topbar-project">
+      <div class="topbar-dot"></div>
+      <span class="topbar-pname" id="topbarPname">Nenhum projeto</span>
+    </div>
+    <div class="topbar-actions">
+      <!-- Mobile: sidebar toggle -->
+      <div class="icon-btn" id="sidebarToggle" onclick="toggleSidebar()" style="display:none;">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+      <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Alternar modo claro/escuro">🌙</div>
+      <div class="icon-btn" onclick="openDrawer()">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body-layout">
+
+    <!-- SIDEBAR OVERLAY (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-section-label">Projetos</div>
+      <div class="sidebar-projects" id="sidebarProjects">
+        <div style="padding:20px 8px;text-align:center;font-size:0.78rem;color:var(--muted2);line-height:1.6;">
+          Nenhum projeto ainda.<br>Crie seu primeiro universo.
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <button class="new-proj-btn" onclick="createProject()">
+          <span>✦</span> Novo Projeto
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+
+      <!-- WORKSPACE TABS -->
+      <div class="workspace-tabs" id="workspaceTabs">
+        <div class="wtab active" data-tab="home" onclick="switchTab('home',this)">
+          <span class="wtab-icon">🏠</span> Início
+        </div>
+        <div class="wtab" data-tab="dev" onclick="switchTab('dev',this)">
+          <span class="wtab-icon">📝</span> Desenvolvimento
+        </div>
+        <div class="wtab" data-tab="visual" onclick="switchTab('visual',this)">
+          <span class="wtab-icon">🎨</span> Design Visual
+        </div>
+        <div class="wtab" data-tab="audio" onclick="switchTab('audio',this)">
+          <span class="wtab-icon">🎵</span> Áudio
+        </div>
+        <div class="wtab locked" data-tab="final" onclick="switchTab('final',this)">
+          <span class="wtab-icon">🎬</span> Final
+        </div>
+      </div>
+
+      <!-- ── TAB: HOME ── -->
+      <div class="tab-panel active" id="tab-home">
+        <div class="home-panel" id="homePanel">
+          <div class="home-welcome">
+            <div class="home-welcome-title" id="homeTitle">Bem-vindo ao AURION</div>
+            <div class="home-welcome-sub" id="homeSub">Selecione um projeto na sidebar ou crie um novo para começar.</div>
+          </div>
+          <div id="homeCards"></div>
+        </div>
+      </div>
+
+      <!-- ── TAB: DESENVOLVIMENTO ── -->
+      <div class="tab-panel" id="tab-dev">
+        <div class="chat-split">
+          <!-- Mobile char form -->
+          <div class="char-form-mobile" id="charFormMobile" style="display:none;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;">Ficha do Personagem</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <input id="fNameM" class="aurion-input" placeholder="Nome..."/>
+              <input id="fDesignM" class="aurion-input" placeholder="Design físico..."/>
+              <input id="fPersonalityM" class="aurion-input" placeholder="Personalidade..."/>
+              <input id="fAbilitiesM" class="aurion-input" placeholder="Habilidades..."/>
+              <input id="fTraitsM" class="aurion-input" placeholder="Traços pessoais..."/>
+              <button class="save-char-btn" onclick="saveCharFromForm()">Salvar Personagem</button>
+            </div>
+          </div>
+
+          <div class="chat-col">
+            <!-- Dev sub-tabs -->
+            <div style="display:flex;gap:2px;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;flex-shrink:0;">
+              <div class="wtab active" data-devtab="world" onclick="switchDevTab('world',this)" style="height:38px;font-size:0.75rem;">🌐 Mundo</div>
+              <div class="wtab" data-devtab="chars" onclick="switchDevTab('chars',this)" style="height:38px;font-size:0.75rem;">👥 Personagens</div>
+              <div class="wtab" data-devtab="story" onclick="switchDevTab('story',this)" style="height:38px;font-size:0.75rem;">📖 História</div>
+            </div>
+            <div class="chat-area" id="chatArea"></div>
+            <div class="chat-input-zone">
+              <div class="chat-irow">
+                <textarea id="inp" placeholder="Fale com a AURION..." rows="1"></textarea>
+                <button class="send-btn" id="sbtn" onclick="send()">
+                  <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop char sidebar -->
+          <div class="char-sidebar" id="charSidebar" style="display:none;">
+            <div class="csb-header">Ficha do Personagem</div>
+            <div class="csb-body">
+              <div>
+                <div class="field-label">Personagens</div>
+                <div class="csb-char-tabs" id="csbCharTabs"></div>
+              </div>
+              <div><div class="field-label">Nome</div><input id="fName" class="aurion-input" placeholder="Nome..." oninput="syncChar()"/></div>
+              <div><div class="field-label">Design físico</div><textarea id="fDesign" class="aurion-textarea" placeholder="Aparência, roupa, cabelo, olhos..." oninput="syncChar()"></textarea></div>
+              <div><div class="field-label">Personalidade</div><textarea id="fPersonality" class="aurion-textarea" placeholder="Como age, pensa, seus medos..." oninput="syncChar()"></textarea></div>
+              <div><div class="field-label">Habilidades</div><textarea id="fAbilities" class="aurion-textarea" placeholder="Poderes, talentos únicos..." oninput="syncChar()"></textarea></div>
+              <div><div class="field-label">Traços pessoais</div><textarea id="fTraits" class="aurion-textarea" placeholder="Manias, tiques, medos..." oninput="syncChar()"></textarea></div>
+              <button class="save-char-btn" onclick="saveCharFromForm()">✓ Salvar Personagem</button>
+              <button onclick="unlockAllForTesting()" style="width:100%;padding:8px;background:transparent;border:1px dashed rgba(245,158,11,0.3);border-radius:8px;color:var(--gold);font-size:0.7rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-top:4px;">⚡ [TESTE] Desbloquear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: DESIGN VISUAL ── -->
+      <div class="tab-panel" id="tab-visual">
+        <div class="visual-panel">
+          <div class="visual-desktop" style="display:flex;flex-direction:column;gap:16px;">
+            <!-- LEFT: controls -->
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <div class="vsec-label">Personagem</div>
+                <div class="char-selector" id="charSelector"></div>
+              </div>
+              <div>
+                <div class="vsec-label">Estilo Visual</div>
+                <div class="style-grid">
+                  <div class="style-card active" onclick="selectStyle('modern',this)"><div class="style-card-icon">✨</div><div class="style-card-name">Moderno</div></div>
+                  <div class="style-card" onclick="selectStyle('90s',this)"><div class="style-card-icon">📼</div><div class="style-card-name">Anos 90</div></div>
+                  <div class="style-card" onclick="selectStyle('shonen',this)"><div class="style-card-icon">⚡</div><div class="style-card-name">Shonen</div></div>
+                  <div class="style-card" onclick="selectStyle('chibi',this)"><div class="style-card-icon">🌸</div><div class="style-card-name">Chibi</div></div>
+                  <div class="style-card" onclick="selectStyle('seinen',this)"><div class="style-card-icon">🗡</div><div class="style-card-name">Seinen</div></div>
+                </div>
+              </div>
+              <div>
+                <div class="vsec-label">Vista</div>
+                <div class="view-tabs">
+                  <div class="view-tab active" onclick="selectView('front',this)">Frente</div>
+                  <div class="view-tab" onclick="selectView('back',this)">Costas</div>
+                  <div class="view-tab" onclick="selectView('detail',this)">Detalhes</div>
+                </div>
+              </div>
+              <div class="prompt-box">
+                <div class="prompt-box-label">Prompt (editável)</div>
+                <textarea id="promptBox" placeholder="Será gerado automaticamente..."></textarea>
+              </div>
+              <button class="gen-btn" id="genBtn" onclick="generateImage()">🎨 Gerar Imagem</button>
+            </div>
+            <!-- RIGHT: ficha -->
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="vsec-label">Ficha do Personagem</div>
+              <div class="ficha-tabs">
+                <div class="ficha-tab active" onclick="this.parentElement.querySelectorAll('.ficha-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');">Frente</div>
+                <div class="ficha-tab" onclick="this.parentElement.querySelectorAll('.ficha-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');">Costas</div>
+                <div class="ficha-tab" onclick="this.parentElement.querySelectorAll('.ficha-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');">Detalhes</div>
+              </div>
+              <div class="image-frame" id="imageFrame">
+                <div class="image-placeholder">
+                  <div class="image-placeholder-icon">🎨</div>
+                  <div class="image-placeholder-text">Selecione um personagem e gere a imagem</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: ÁUDIO ── -->
+      <div class="tab-panel" id="tab-audio">
+        <div class="audio-panel">
+          <div>
+            <div class="vsec-label">Tipo de Faixa</div>
+            <div class="audio-type-grid">
+              <div class="audio-type-card active" onclick="selectAudioType('opening',this)">
+                <div class="audio-type-icon">🎵</div>
+                <div class="audio-type-name">Abertura</div>
+                <div class="audio-type-desc">Tema de abertura do anime</div>
+              </div>
+              <div class="audio-type-card" onclick="selectAudioType('ost',this)">
+                <div class="audio-type-icon">🎼</div>
+                <div class="audio-type-name">Trilha Sonora</div>
+                <div class="audio-type-desc">OST para cenas e batalhas</div>
+              </div>
+              <div class="audio-type-card" onclick="selectAudioType('ending',this)">
+                <div class="audio-type-icon">🌙</div>
+                <div class="audio-type-name">Encerramento</div>
+                <div class="audio-type-desc">Tema de encerramento</div>
+              </div>
+              <div class="audio-type-card" onclick="selectAudioType('credits',this)">
+                <div class="audio-type-icon">✨</div>
+                <div class="audio-type-name">Créditos</div>
+                <div class="audio-type-desc">Música dos créditos finais</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="vsec-label">Estilo Musical</div>
+            <div class="audio-style-row" id="audioStyleRow">
+              <div class="audio-style-chip active" onclick="selectAudioStyle('j-rock',this)">J-Rock</div>
+              <div class="audio-style-chip" onclick="selectAudioStyle('orchestral',this)">Orquestral Épico</div>
+              <div class="audio-style-chip" onclick="selectAudioStyle('j-pop',this)">J-Pop</div>
+              <div class="audio-style-chip" onclick="selectAudioStyle('lo-fi',this)">Lo-fi / Melancólico</div>
+              <div class="audio-style-chip" onclick="selectAudioStyle('electronic',this)">Eletrônico</div>
+              <div class="audio-style-chip" onclick="selectAudioStyle('traditional',this)">Tradicional Japonês</div>
+            </div>
+          </div>
+          <div class="audio-desc-box">
+            <div class="vsec-label">Descrição da Cena / Emoção</div>
+            <textarea class="aurion-textarea" id="audioDesc" placeholder="Descreva a emoção ou cena que a música deve representar... Ex: batalha épica, momento triste, vitória..." style="min-height:80px;"></textarea>
+          </div>
+          <button class="audio-gen-btn" id="audioGenBtn" onclick="generateAudio()">
+            🎵 Gerar com IA
+          </button>
+          <div id="audioResult">
+            <div class="audio-placeholder">
+              <div class="audio-placeholder-icon">🎵</div>
+              <div class="audio-placeholder-text">Suas faixas geradas aparecerão aqui.<br>A AURION cria músicas com base na estética do seu projeto.</div>
+            </div>
+          </div>
+          <div id="audioTracks" class="audio-tracks"></div>
+        </div>
+      </div>
+
+      <!-- ── TAB: FINAL ── -->
+      <div class="tab-panel" id="tab-final">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:40px;text-align:center;">
+          <div style="font-size:3rem;">🎬</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.1em;color:var(--white);">Exibição Final</div>
+          <div style="font-size:0.88rem;color:var(--muted);max-width:300px;line-height:1.6;">Esta sala será desbloqueada quando o Design Visual e o Áudio estiverem completos.</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);padding:8px 16px;border:1px solid var(--border2);border-radius:20px;">Em desenvolvimento</div>
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /body-layout -->
+</div><!-- /app -->
+
+<!-- DRAWER -->
+<div class="overlay" id="ov" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="dhead">
+    <div class="dtitle">CONFIGURAÇÕES</div>
+    <div class="xbtn" onclick="closeDrawer()"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg></div>
+  </div>
+  <div class="dsec">
+    <div class="dsec-title">Modelo de IA</div>
+    <select class="sselect" id="cfgModel">
+      <option value="llama-3.3-70b-versatile">Llama 3.3 70B (recomendado)</option>
+      <option value="llama-3.1-8b-instant">Llama 3.1 8B (rápido)</option>
+      <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+    </select>
+    <button class="save-btn" onclick="saveConfig()">Salvar</button>
+  </div>
+  <div class="dsec">
+    <div class="dsec-title">Sobre</div>
+    <p style="font-size:0.78rem;color:var(--muted);line-height:1.6;">AURION · Estúdio de Criação de Animes<br>v0.2 Alpha — Em desenvolvimento</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════
+// STORAGE
+// ══════════════════════════════════
+const store = {
+  _m:{},
+  get(k){try{return localStorage.getItem(k);}catch(e){return this._m[k]||null;}},
+  set(k,v){try{localStorage.setItem(k,v);}catch(e){this._m[k]=v;}},
+  remove(k){try{localStorage.removeItem(k);}catch(e){delete this._m[k];}}
+};
+
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+const S = {
+  projects:[],
+  current:null,
+  currentIdx:-1,
+  currentDevTab:'world',
+  hist:{ world:[], chars:[], story:[] },
+  busy:false,
+  model: store.get('aurion_model') || 'llama-3.3-70b-versatile',
+  VS:{ char:null, style:'modern', view:'front' },
+  AS:{ type:'opening', style:'j-rock' }
+};
+
+const BACKEND_URL = '';
+
+// ══════════════════════════════════
+// SPLASH
+// ══════════════════════════════════
+const splashMsgs = ['Inicializando universo...','Carregando estúdio...','Preparando AURION...','Pronto!'];
+let splashIdx = 0;
+const splashInt = setInterval(()=>{
+  splashIdx++;
+  if(splashIdx < splashMsgs.length) document.getElementById('splashStatus').textContent = splashMsgs[splashIdx];
+}, 400);
+
+setTimeout(()=>{
+  clearInterval(splashInt);
+  document.getElementById('splash').style.opacity='0';
+  document.getElementById('splash').style.transition='opacity 0.4s';
+  setTimeout(()=>{
+    document.getElementById('splash').style.display='none';
+    document.getElementById('app').classList.add('ready');
+    loadProjects();
+    loadTheme();
+    checkMobile();
+  },400);
+}, 1200);
+
+// ══════════════════════════════════
+// RESPONSIVE
+// ══════════════════════════════════
+function checkMobile(){
+  const isMobile = window.innerWidth <= 768;
+  document.getElementById('sidebarToggle').style.display = isMobile ? 'flex' : 'none';
+}
+window.addEventListener('resize', checkMobile);
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+// ══════════════════════════════════
+// TABS
+// ══════════════════════════════════
+function switchTab(tabId, el){
+  if(el.classList.contains('locked')){ toast('Complete as etapas anteriores primeiro'); return; }
+  document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+tabId).classList.add('active');
+
+  if(tabId==='dev' && S.current) renderChatForTab();
+  if(tabId==='visual' && S.current) renderVisualTab();
+  if(tabId==='audio' && S.current) renderAudioTab();
+}
+
+function switchDevTab(tabId, el){
+  document.querySelectorAll('[data-devtab]').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  S.currentDevTab = tabId;
+  S.hist[tabId] = S.current?.hist?.[tabId] || [];
+  renderChatForTab();
+
+  // Show char sidebar only for chars tab
+  const cs = document.getElementById('charSidebar');
+  const cm = document.getElementById('charFormMobile');
+  if(tabId==='chars'){
+    cs.style.display='flex'; cs.style.flexDirection='column';
+    renderCharSidebar();
+  } else {
+    cs.style.display='none';
+    if(cm) cm.style.display='none';
+  }
+}
+
+// ══════════════════════════════════
+// PROJECTS
+// ══════════════════════════════════
+function loadProjects(){
+  try{ S.projects = JSON.parse(store.get('aurion_projects')||'[]'); }catch(e){ S.projects=[]; }
+  renderSidebar();
+}
+
+function saveProjects(){ store.set('aurion_projects', JSON.stringify(S.projects)); }
+
+function renderSidebar(){
+  const el=document.getElementById('sidebarProjects');
+  if(!S.projects.length){
+    el.innerHTML='<div style="padding:20px 8px;text-align:center;font-size:0.78rem;color:var(--muted2);line-height:1.6;">Nenhum projeto ainda.<br>Crie seu universo.</div>';
+    return;
+  }
+  el.innerHTML=S.projects.map((p,i)=>`
+    <div class="sproj-item ${i===S.currentIdx?'active':''}" onclick="openProject(${i})">
+      <div class="sproj-icon">${p.icon||'✦'}</div>
+      <div class="sproj-info">
+        <div class="sproj-name" id="sprojName${i}" ondblclick="editProjectName(${i},event)">${p.name}</div>
+        <div class="sproj-stage">${stageLabel(p.stage)}</div>
+      </div>
+      <span class="sproj-edit" onclick="editProjectName(${i},event)" title="Renomear">✏️</span>
+    </div>`).join('');
+}
+
+function editProjectName(idx, e){
+  e.stopPropagation();
+  const el=document.getElementById(`sprojName${idx}`);
+  if(!el) return;
+  const current=S.projects[idx].name;
+  el.innerHTML=`<input class="sproj-name-input" value="${current}" onblur="saveProjectName(${idx},this)" onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){this.value='${current}';this.blur();}" />`;
+  const input=el.querySelector('input');
+  input.focus(); input.select();
+}
+
+function saveProjectName(idx, input){
+  const newName=input.value.trim()||S.projects[idx].name;
+  S.projects[idx].name=newName;
+  if(idx===S.currentIdx){
+    S.current.name=newName;
+    document.getElementById('topbarPname').textContent=newName;
+    renderHome();
+  }
+  saveProjects();
+  renderSidebar();
+}
+
+function stageLabel(s){
+  const m={world:'Mundo',character:'Personagens',story:'História',visual:'Visual',audio:'Áudio',animation:'Produção'};
+  return m[s]||'Escrita';
+}
+
+function openProject(idx){
+  S.current=S.projects[idx]; S.currentIdx=idx;
+  S.hist={ world:S.current.hist?.world||[], chars:S.current.hist?.chars||[], story:S.current.hist?.story||[] };
+  document.getElementById('topbarPname').textContent=S.current.name;
+  renderSidebar();
+  renderHome();
+  switchTab('home', document.querySelector('[data-tab="home"]'));
+  if(window.innerWidth<=768) toggleSidebar();
+}
+
+function createProject(){
+  const icons=['✦','🌌','⚔️','🔮','🌸','🐉','🌊','🔥','⚡','🗡'];
+  const p={
+    name:'Novo Projeto',
+    desc:'',
+    icon:icons[Math.floor(Math.random()*icons.length)],
+    date:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}),
+    stage:'world', world:null, chars:[], story:null,
+    hist:{world:[],chars:[],story:[]}, fichas:{}, tracks:[]
+  };
+  S.projects.unshift(p);
+  saveProjects();
+  openProject(0);
+  // Auto open rename so user can set name (or leave as is)
+  setTimeout(()=>editProjectName(0,{stopPropagation:()=>{}}), 400);
+}
+
+// ══════════════════════════════════
+// HOME
+// ══════════════════════════════════
+function renderHome(){
+  if(!S.current){
+    document.getElementById('homeTitle').textContent='Bem-vindo ao AURION';
+    document.getElementById('homeSub').textContent='Selecione um projeto na sidebar ou crie um novo.';
+    document.getElementById('homeCards').innerHTML='';
+    return;
+  }
+  const p=S.current;
+  document.getElementById('homeTitle').textContent=p.name;
+  document.getElementById('homeSub').textContent=p.desc||'Universo em construção — continue de onde parou.';
+
+  const modules=[
+    {id:'dev',icon:'📝',name:'Desenvolvimento',desc:'Mundo, personagens e história',tab:'dev',done:!!p.world},
+    {id:'visual',icon:'🎨',name:'Design Visual',desc:'Fichas e aparência dos personagens',tab:'visual',done:!!(p.fichas&&Object.keys(p.fichas).length)},
+    {id:'audio',icon:'🎵',name:'Áudio & Trilha',desc:'Abertura, OST e encerramento',tab:'audio',done:!!(p.tracks?.length)},
+    {id:'final',icon:'🎬',name:'Exibição Final',desc:'Assista ao resultado completo',tab:'final',locked:true},
+  ];
+
+  document.getElementById('homeCards').innerHTML=`
+    <div class="home-cards">
+      ${modules.map(m=>`
+        <div class="home-card" onclick="${m.locked?'toast(\'Em breve!\')':'switchTab(\''+m.tab+'\',document.querySelector(\'[data-tab=\\"'+m.tab+'\\"]\'))'}">
+          <div class="home-card-icon">${m.icon}</div>
+          <div class="home-card-name">${m.name}</div>
+          <div class="home-card-desc">${m.desc}</div>
+          <span class="home-card-badge ${m.locked?'soon':m.done?'done':'active'}">${m.locked?'em breve':m.done?'✓ concluído':'disponível'}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ══════════════════════════════════
+// SYSTEM PROMPT
+// ══════════════════════════════════
+function buildSys(){
+  const p=S.current; const tab=S.currentDevTab;
+  const tabInfo={
+    world:  {name:'Mundo',       focus:'Ajudar o usuário a desenvolver o mundo DELE — não criar por conta própria'},
+    chars:  {name:'Personagens', focus:'Ajudar o usuário a desenvolver os personagens DELE — não inventar características'},
+    story:  {name:'História',    focus:'Ajudar o usuário a desenvolver a história DELE — seguir a visão do usuário'}
+  };
+  const t=tabInfo[tab]||tabInfo.world;
+  return `Você é AURION, parceiro criativo para criação de animes.
+
+PERSONALIDADE:
+- Tom casual, direto e descontraído — como um amigo criativo
+- Respostas CURTAS — máximo 3-4 linhas por resposta
+- Nunca escreva parágrafos longos
+- Use linguagem simples e informal
+
+REGRA PRINCIPAL:
+Você está aqui para AJUDAR o usuário a desenvolver a ideia DELE.
+- NÃO crie coisas por conta própria sem permissão
+- NÃO tome decisões criativas pelo usuário
+- PERGUNTE antes de sugerir
+- Se o usuário tiver uma ideia → desenvolva AQUELA ideia
+- Só sugira quando o usuário pedir explicitamente
+
+PROJETO: "${p.name}"
+FOCO: ${t.name}
+MUNDO: ${p.world||'não definido'}
+PERSONAGENS: ${p.chars?.length?p.chars.map(c=>c.name||c).join(', '):'nenhum'}
+HISTÓRIA: ${p.story||'não desenvolvida'}
+
+${tab==='chars'?`
+CAMPOS DO PERSONAGEM (colete naturalmente, um por vez):
+- Nome
+- Design visual (aparência física)
+- Personalidade
+- Habilidades
+- Traços pessoais
+
+Formato no aurion_data:
+"characters":[{"name":"...","design":"...","personality":"...","abilities":"...","traits":"..."}]
+`:''}
+
+ESTRUTURA DE RESPOSTA:
+1. Reconhece o que o usuário disse (1 linha)
+2. Contribui ou pergunta (1-2 linhas)
+3. NO MÁXIMO uma pergunta por vez
+
+NUNCA:
+- Escrever textos longos
+- Criar coisas sem o usuário pedir
+- Usar linguagem formal ou técnica
+- Repetir o que já foi dito
+
+Ao final se houver dados novos:
+<aurion_data>{"world":null,"characters":[],"story":null,"desc":null}</aurion_data>`;
+}
+
+// ══════════════════════════════════
+// CHAT
+// ══════════════════════════════════
+function renderChatForTab(){
+  const area=document.getElementById('chatArea');
+  const tab=S.currentDevTab;
+  const hist=S.hist[tab]||[];
+
+  area.innerHTML='';
+  if(!hist.filter(h=>h.role!=='system').length){
+    const chips={
+      world:[{l:'🌍 Mundo real',t:'Quero um mundo parecido com o nosso mas com fantasia'},{l:'🚀 Sci-fi',t:'Universo de ficção científica futurista'},{l:'⚔️ Fantasia épica',t:'Mundo de fantasia com magia e diferentes raças'}],
+      chars:[{l:'🦸 Protagonista',t:'Quero criar o protagonista principal'},{l:'🦹 Antagonista',t:'Quero criar o antagonista'},{l:'👥 Elenco',t:'Quero desenvolver o elenco completo'}],
+      story:[{l:'⚡ Aventura',t:'Historia de aventura épica'},{l:'💔 Drama',t:'História com conflitos emocionais'},{l:'🔥 Ação',t:'História de batalhas e confrontos'}]
+    };
+    const tabNames={world:'Mundo',chars:'Personagens',story:'História'};
+    const icons={world:'🌐',chars:'👥',story:'📖'};
+    area.innerHTML=`<div class="welcome-chat">
+      <div class="welcome-chat-icon">${icons[tab]}</div>
+      <div class="welcome-chat-title">${tabNames[tab]}</div>
+      <p class="welcome-chat-sub">Conte o que você imaginou — a AURION constrói junto com você.</p>
+      <div class="chips">${(chips[tab]||[]).map(c=>`<div class="chip" onclick="qs('${c.t}')">${c.l}</div>`).join('')}</div>
+    </div>`;
+  } else {
+    hist.filter(h=>h.role!=='system').forEach(h=>addMsgEl(h.role==='user'?'user':'aurion',h.content));
+  }
+  area.scrollTop=area.scrollHeight;
+}
+
+function addMsgEl(role, text){
+  const area=document.getElementById('chatArea');
+  const w=area.querySelector('.welcome-chat'); if(w) w.remove();
+  const g=document.createElement('div');
+  g.className='mgroup '+(role==='user'?'user':'aurion');
+  g.innerHTML=`<div class="msender">${role==='user'?'Você':'AURION'}</div><div class="mbubble">${text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>`;
+  area.appendChild(g);
+  area.scrollTop=area.scrollHeight;
+}
+
+function showTyping(){
+  const area=document.getElementById('chatArea');
+  const t=document.createElement('div');
+  t.id='typ'; t.className='mgroup aurion';
+  t.innerHTML=`<div class="msender">AURION</div><div class="typing-b"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>`;
+  area.appendChild(t); area.scrollTop=area.scrollHeight;
+}
+function hideTyping(){ const t=document.getElementById('typ'); if(t)t.remove(); }
+
+async function callAPI(msg){
+  const tab=S.currentDevTab;
+  const hist=S.hist[tab]||[];
+  hist.push({role:'user',content:msg});
+  const r=await fetch(`${BACKEND_URL}/chat`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({messages:hist, systemPrompt:buildSys(), model:S.model})
+  });
+  if(!r.ok){const e=await r.json().catch(()=>{});throw new Error(e?.error||'Erro no servidor.');}
+  const d=await r.json();
+  const full=d.reply||'';
+  const m=full.match(/<aurion_data>([\s\S]*?)<\/aurion_data>/);
+  const clean=full.replace(/<aurion_data>[\s\S]*?<\/aurion_data>/g,'').trim();
+  if(m){try{applyData(JSON.parse(m[1].trim()));}catch(e){}}
+  hist.push({role:'assistant',content:clean});
+  S.hist[tab]=hist;
+  if(S.current){
+    if(!S.current.hist) S.current.hist={};
+    S.current.hist[tab]=hist;
+    S.projects[S.currentIdx]=S.current;
+    saveProjects();
+  }
+  return clean;
+}
+
+function applyData(d){
+  if(!S.current) return;
+  if(d.world) S.current.world=d.world;
+  if(d.characters?.length){
+    if(!S.current.chars) S.current.chars=[];
+    d.characters.forEach(nc=>{
+      const existing=S.current.chars.findIndex(c=>c.name===nc.name);
+      if(existing>=0) S.current.chars[existing]={...S.current.chars[existing],...nc};
+      else S.current.chars.push(nc);
+    });
+    renderCharSidebar();
+  }
+  if(d.story) S.current.story=d.story;
+  if(d.desc) S.current.desc=d.desc;
+  S.projects[S.currentIdx]=S.current;
+  saveProjects();
+}
+
+async function send(txt){
+  if(!S.current){toast('Selecione um projeto primeiro');return;}
+  const inp=document.getElementById('inp');
+  const msg=txt||inp.value.trim();
+  if(!msg||S.busy) return;
+  S.busy=true; document.getElementById('sbtn').disabled=true;
+  inp.value=''; inp.style.height='auto';
+  addMsgEl('user',msg); showTyping();
+  try{
+    const rep=await callAPI(msg);
+    hideTyping(); addMsgEl('aurion',rep);
+  }catch(e){ hideTyping(); addMsgEl('aurion',e.message||'Algo deu errado.'); }
+  S.busy=false; document.getElementById('sbtn').disabled=false;
+}
+function qs(t){send(t);}
+
+// ══════════════════════════════════
+// CHAR SIDEBAR
+// ══════════════════════════════════
+function renderCharSidebar(){
+  if(!S.current) return;
+  const chars=(S.current.chars||[]).filter(c=>typeof c==='object');
+  const tabs=document.getElementById('csbCharTabs');
+  if(!tabs) return;
+  tabs.innerHTML=chars.map((c,i)=>`<div class="csb-char-pill ${i===0?'active':''}" onclick="loadCharInForm(${i},this)">${c.name||'Sem nome'}</div>`).join('');
+  if(chars.length) loadCharInForm(0, tabs.querySelector('.csb-char-pill'));
+}
+
+function loadCharInForm(idx, el){
+  document.querySelectorAll('.csb-char-pill').forEach(p=>p.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const char=(S.current.chars||[]).filter(c=>typeof c==='object')[idx];
+  if(!char) return;
+  S._editingChar=char.name;
+  document.getElementById('fName').value=char.name||'';
+  document.getElementById('fDesign').value=char.design||'';
+  document.getElementById('fPersonality').value=char.personality||'';
+  document.getElementById('fAbilities').value=char.abilities||'';
+  document.getElementById('fTraits').value=char.traits||'';
+}
+
+function syncChar(){
+  if(!S.current) return;
+  const name=document.getElementById('fName')?.value.trim();
+  if(!name) return;
+  if(!S.current.chars) S.current.chars=[];
+  let char=S.current.chars.find(c=>typeof c==='object'&&c.name===name);
+  if(!char){ char={name}; S.current.chars.push(char); }
+  char.design=      document.getElementById('fDesign')?.value.trim()||'';
+  char.personality= document.getElementById('fPersonality')?.value.trim()||'';
+  char.abilities=   document.getElementById('fAbilities')?.value.trim()||'';
+  char.traits=      document.getElementById('fTraits')?.value.trim()||'';
+  S.projects[S.currentIdx]=S.current; saveProjects();
+}
+
+function saveCharFromForm(){
+  syncChar();
+  toast('Personagem salvo ✓');
+  renderCharSidebar();
+}
+
+// ══════════════════════════════════
+// VISUAL TAB
+// ══════════════════════════════════
+function renderVisualTab(){
+  if(!S.current) return;
+  const chars=(S.current.chars||[]).filter(c=>typeof c==='object');
+  const sel=document.getElementById('charSelector');
+  sel.innerHTML=chars.length
+    ? chars.map((c,i)=>`<div class="char-pill ${i===0?'active':''}" onclick="selectVisualChar(${i},this)">${c.name}</div>`).join('')
+    : '<div style="font-size:0.78rem;color:var(--muted2);">Crie personagens no Desenvolvimento primeiro.</div>';
+  if(chars.length){ S.VS.char=chars[0]; }
+}
+
+function selectVisualChar(idx,el){
+  document.querySelectorAll('.char-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  S.VS.char=(S.current.chars||[]).filter(c=>typeof c==='object')[idx];
+  document.getElementById('promptBox').value='';
+  const ficha=S.current.fichas?.[S.VS.char?.name]?.[S.VS.view];
+  const frame=document.getElementById('imageFrame');
+  if(ficha) frame.innerHTML=`<img src="${ficha}" alt="${S.VS.char.name}">`;
+  else frame.innerHTML=`<div class="image-placeholder"><div class="image-placeholder-icon">🎨</div><div class="image-placeholder-text">Gere a imagem do personagem</div></div>`;
+}
+
+function selectStyle(style,el){ document.querySelectorAll('.style-card').forEach(c=>c.classList.remove('active')); el.classList.add('active'); S.VS.style=style; document.getElementById('promptBox').value=''; }
+function selectView(view,el){ document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); S.VS.view=view; document.getElementById('promptBox').value=''; }
+
+async function generateImage(){
+  if(!S.VS.char){toast('Selecione um personagem');return;}
+  const btn=document.getElementById('genBtn');
+  const frame=document.getElementById('imageFrame');
+  btn.disabled=true; btn.innerHTML='<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite"></div> Gerando...';
+  frame.innerHTML='<div class="image-loading"><div class="image-loading-spinner"></div><div class="image-loading-text">Construindo prompt...<br>Aguarde ☕</div></div>';
+  try{
+    let prompt=document.getElementById('promptBox').value.trim();
+    if(!prompt){
+      const r1=await fetch(`${BACKEND_URL}/build-prompt`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({charData:S.VS.char,style:S.VS.style,view:S.VS.view})});
+      const d1=await r1.json();
+      if(!r1.ok) throw new Error(d1.error||'Erro ao construir prompt');
+      prompt=d1.prompt;
+      document.getElementById('promptBox').value=prompt;
+    }
+
+    // Get URL from server (avoids CORS) then load image directly in browser
+    const r2=await fetch(`${BACKEND_URL}/generate-image`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d2=await r2.json();
+    if(!r2.ok) throw new Error(d2.error||'Erro ao gerar imagem');
+
+    const imageUrl = d2.imageUrl;
+    frame.innerHTML='<div class="image-loading"><div class="image-loading-spinner"></div><div class="image-loading-text">Carregando imagem...<br>Pode levar alguns segundos ☕</div></div>';
+
+    // Load image in browser directly
+    const img = new Image();
+    img.onload = () => {
+      if(!S.current.fichas) S.current.fichas={};
+      if(!S.current.fichas[S.VS.char.name]) S.current.fichas[S.VS.char.name]={};
+      S.current.fichas[S.VS.char.name][S.VS.view]=imageUrl;
+      S.projects[S.currentIdx]=S.current; saveProjects();
+      frame.innerHTML=`<img src="${imageUrl}" alt="${S.VS.char.name}" style="width:100%;height:auto;display:block;">`;
+      btn.disabled=false; btn.innerHTML='🎨 Gerar Imagem';
+      toast('✓ Imagem gerada!');
+    };
+    img.onerror = () => {
+      frame.innerHTML=`<div class="image-placeholder"><div style="color:var(--red);">Erro ao carregar imagem. Tente novamente.</div></div>`;
+      btn.disabled=false; btn.innerHTML='🎨 Gerar Imagem';
+    };
+    img.src = imageUrl;
+    return; // early return — btn re-enabled in callbacks above
+
+  }catch(e){ frame.innerHTML=`<div class="image-placeholder"><div style="color:var(--red);">${e.message}</div></div>`; toast(e.message); }
+  btn.disabled=false; btn.innerHTML='🎨 Gerar Imagem';
+}
+
+// ══════════════════════════════════
+// AUDIO TAB
+// ══════════════════════════════════
+function renderAudioTab(){
+  if(!S.current) return;
+  const tracks=S.current.tracks||[];
+  const el=document.getElementById('audioTracks');
+  if(tracks.length){
+    el.innerHTML=tracks.map(t=>`
+      <div class="audio-result">
+        <div class="audio-result-header">
+          <div class="audio-result-icon">${audioTypeIcon(t.type)}</div>
+          <div class="audio-result-info">
+            <div class="audio-result-name">${t.name}</div>
+            <div class="audio-result-meta">${t.type} · ${t.style} · ${t.date}</div>
+          </div>
+        </div>
+        ${t.url?`<audio controls src="${t.url}"></audio>`:'<div style="font-size:0.75rem;color:var(--muted);font-style:italic;">Gerado via IA — abra o link abaixo</div>'}
+        ${t.link?`<a href="${t.link}" target="_blank" style="font-size:0.75rem;color:var(--cyan);text-decoration:none;">🔗 Abrir no Suno/Udio →</a>`:''}
+      </div>`).join('');
+    document.getElementById('audioResult').innerHTML='';
+  }
+}
+
+function audioTypeIcon(type){ return {opening:'🎵',ost:'🎼',ending:'🌙',credits:'✨'}[type]||'🎵'; }
+
+function selectAudioType(type,el){ document.querySelectorAll('.audio-type-card').forEach(c=>c.classList.remove('active')); el.classList.add('active'); S.AS.type=type; }
+function selectAudioStyle(style,el){ document.querySelectorAll('.audio-style-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); S.AS.style=style; }
+
+async function generateAudio(){
+  if(!S.current){toast('Selecione um projeto primeiro');return;}
+  const btn=document.getElementById('audioGenBtn');
+  const desc=document.getElementById('audioDesc').value.trim();
+  const typeNames={opening:'Abertura',ost:'Trilha Sonora',ending:'Encerramento',credits:'Créditos'};
+
+  btn.disabled=true; btn.innerHTML='🎵 Gerando...';
+  document.getElementById('audioResult').innerHTML=`
+    <div class="audio-placeholder">
+      <div class="image-loading-spinner" style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+      <div class="audio-placeholder-text">Criando música com base no seu projeto...<br>Aguarde ☕</div>
+    </div>`;
+
+  try{
+    // Step 1: Build music prompt with Groq
+    const r=await fetch(`${BACKEND_URL}/chat`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        systemPrompt:`You are an expert at creating music generation prompts for AI tools like Mubert, Suno and Udio.
+Create a detailed English music prompt based on the anime info.
+Include: genre, instruments, mood, tempo, artist references.
+Return ONLY the prompt in English, nothing else. Max 100 words.`,
+        messages:[{role:'user',content:`Anime: ${S.current.name}
+Track type: ${typeNames[S.AS.type]}
+Musical style: ${S.AS.style}
+Mood/Scene: ${desc||'general anime theme'}
+World: ${S.current.world||'anime universe'}`}],
+        model:S.model
+      })
+    });
+    const d=await r.json();
+    const musicPrompt=d.reply?.trim()||`${S.AS.style} anime music, ${typeNames[S.AS.type]}, emotional, epic`;
+
+    // Step 2: Try to generate actual audio
+    const r2=await fetch(`${BACKEND_URL}/generate-music`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:musicPrompt, duration:30})
+    });
+    const d2=await r2.json();
+
+    const track={
+      type:S.AS.type, style:S.AS.style,
+      name:`${typeNames[S.AS.type]} — ${S.current.name}`,
+      prompt:musicPrompt,
+      url: d2.audioUrl||null,
+      title: d2.title||null,
+      sunoLink:`https://suno.com/create?prompt=${encodeURIComponent(musicPrompt)}`,
+      udioLink:`https://www.udio.com/create?prompt=${encodeURIComponent(musicPrompt)}`,
+      date:new Date().toLocaleDateString('pt-BR'),
+      source: d2.source||'manual'
+    };
+
+    if(!S.current.tracks) S.current.tracks=[];
+    S.current.tracks.unshift(track);
+    S.projects[S.currentIdx]=S.current; saveProjects();
+
+    // Show result with audio player if URL available
+    document.getElementById('audioResult').innerHTML=`
+      <div class="audio-result">
+        <div class="audio-result-header">
+          <div class="audio-result-icon">${audioTypeIcon(track.type)}</div>
+          <div class="audio-result-info">
+            <div class="audio-result-name">${track.title||track.name}</div>
+            <div class="audio-result-meta">${track.style} · ${track.date}</div>
+          </div>
+        </div>
+        ${track.url
+          ? `<audio controls src="${track.url}" style="width:100%;margin-top:4px;border-radius:8px;"></audio>`
+          : `<div style="padding:10px;background:var(--surface2);border-radius:8px;font-size:0.75rem;color:var(--muted);line-height:1.6;">
+               Áudio não disponível no plano gratuito.<br>Use o prompt abaixo no Suno ou Udio para gerar gratuitamente.
+             </div>`
+        }
+        <div class="prompt-box" style="margin-top:4px;">
+          <div class="prompt-box-label">Prompt musical gerado</div>
+          <div style="font-size:0.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.5;">${musicPrompt}</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <a href="${track.sunoLink}" target="_blank" style="flex:1;padding:10px;background:var(--purple-soft);border:1px solid var(--border);border-radius:8px;font-size:0.78rem;color:var(--white);text-decoration:none;text-align:center;">🎵 Suno</a>
+          <a href="${track.udioLink}" target="_blank" style="flex:1;padding:10px;background:var(--cyan-soft);border:1px solid var(--border2);border-radius:8px;font-size:0.78rem;color:var(--white);text-decoration:none;text-align:center;">🎼 Udio</a>
+        </div>
+      </div>`;
+
+    renderAudioTab();
+    toast('✓ Música gerada!');
+
+  }catch(e){
+    document.getElementById('audioResult').innerHTML=`<div class="audio-placeholder"><div style="color:var(--red);">${e.message||'Erro ao gerar música'}</div></div>`;
+    toast(e.message||'Erro ao gerar música');
+  }
+  btn.disabled=false; btn.innerHTML='🎵 Gerar com IA';
+}
+
+// ══════════════════════════════════
+// TESTING
+// ══════════════════════════════════
+function unlockAllForTesting(){
+  if(!S.current) return;
+  if(!S.current.chars?.length){
+    S.current.chars=[{name:'Kael',personality:'Corajoso, determinado, levemente impulsivo, protetor',design:'Jovem de 17 anos, cabelo preto espetado com mechas roxas, olhos azuis brilhantes, cicatriz diagonal no rosto, roupa preta com detalhes roxos e dourados, capa rasgada',abilities:'Controle de energia etérea, velocidade sobre-humana, barreira protetora',traits:'Medo de perder as pessoas que ama, coça a nuca quando nervoso, nunca desiste mesmo ferido'}];
+  }
+  S.current.stage='visual'; S.projects[S.currentIdx]=S.current; saveProjects();
+  renderCharSidebar(); toast('✓ Desbloqueado para teste!');
+}
+
+// ══════════════════════════════════
+// THEME
+// ══════════════════════════════════
+function toggleTheme(){
+  const isLight=document.body.classList.toggle('light');
+  document.getElementById('themeToggle').textContent=isLight?'☀️':'🌙';
+  store.set('aurion_theme', isLight?'light':'dark');
+}
+
+function loadTheme(){
+  const saved=store.get('aurion_theme');
+  if(saved==='light'){
+    document.body.classList.add('light');
+    document.getElementById('themeToggle').textContent='☀️';
+  }
+}
+
+// ══════════════════════════════════
+// CONFIG / DRAWER
+// ══════════════════════════════════
+function saveConfig(){ S.model=document.getElementById('cfgModel').value; store.set('aurion_model',S.model); toast('Salvo ✓'); closeDrawer(); }
+function openDrawer(){ document.getElementById('cfgModel').value=S.model; document.getElementById('drawer').classList.add('open'); document.getElementById('ov').classList.add('open'); }
+function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('ov').classList.remove('open'); }
+
+// ══════════════════════════════════
+// TOAST
+// ══════════════════════════════════
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+// ══════════════════════════════════
+// INPUT
+// ══════════════════════════════════
+const inp=document.getElementById('inp');
+inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();} });
+inp.addEventListener('input',()=>{ inp.style.height='auto'; inp.style.height=Math.min(inp.scrollHeight,100)+'px'; });
+</script>
+</body>
+</html>
