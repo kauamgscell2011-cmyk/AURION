@@ -800,10 +800,10 @@ audio::-webkit-media-controls-panel { background:var(--surface2); }
         <div class="wtab" data-tab="dev" onclick="switchTab('dev',this)">
           <span class="wtab-icon">📝</span> Desenvolvimento
         </div>
-        <div class="wtab" data-tab="visual" onclick="switchTab('visual',this)">
+        <div class="wtab locked" data-tab="visual" onclick="switchTab('visual',this)">
           <span class="wtab-icon">🎨</span> Design Visual
         </div>
-        <div class="wtab" data-tab="audio" onclick="switchTab('audio',this)">
+        <div class="wtab locked" data-tab="audio" onclick="switchTab('audio',this)">
           <span class="wtab-icon">🎵</span> Áudio
         </div>
         <div class="wtab locked" data-tab="final" onclick="switchTab('final',this)">
@@ -1182,6 +1182,14 @@ function openProject(idx){
   document.getElementById('topbarPname').textContent=S.current.name;
   renderSidebar();
   renderHome();
+
+  // Lock/unlock tabs based on confirmed stages
+  const p=S.current;
+  const visualTab=document.querySelector('[data-tab="visual"]');
+  const audioTab=document.querySelector('[data-tab="audio"]');
+  if(visualTab){ if(p.storyConfirmed) visualTab.classList.remove('locked'); else visualTab.classList.add('locked'); }
+  if(audioTab){ if(p.storyConfirmed) audioTab.classList.remove('locked'); else audioTab.classList.add('locked'); }
+
   switchTab('home', document.querySelector('[data-tab="home"]'));
   if(window.innerWidth<=768) toggleSidebar();
 }
@@ -1386,6 +1394,143 @@ function applyData(d){
   if(d.desc) S.current.desc=d.desc;
   S.projects[S.currentIdx]=S.current;
   saveProjects();
+  // Check completion after every data update
+  checkStageCompletion();
+}
+
+// ══════════════════════════════════
+// STAGE COMPLETION SYSTEM
+// ══════════════════════════════════
+function checkCompletion(tab){
+  const p=S.current;
+  if(!p) return {complete:false, checks:[]};
+
+  if(tab==='world'){
+    const hasWorld = !!(p.world && p.world.trim().length > 20);
+    return {
+      complete: hasWorld,
+      checks:[
+        {label:'Mundo definido', done: hasWorld}
+      ]
+    };
+  }
+
+  if(tab==='chars'){
+    const chars=(p.chars||[]).filter(c=>typeof c==='object');
+    const complete=chars.filter(c=>c.name&&c.design&&c.personality&&c.abilities&&c.traits);
+    const hasOne = complete.length >= 1;
+    return {
+      complete: hasOne,
+      checks:[
+        {label:'Pelo menos 1 personagem criado', done: chars.length>=1},
+        {label:'Nome definido', done: chars.some(c=>c.name)},
+        {label:'Design físico descrito', done: chars.some(c=>c.design)},
+        {label:'Personalidade definida', done: chars.some(c=>c.personality)},
+        {label:'Habilidades definidas', done: chars.some(c=>c.abilities)},
+        {label:'Traços pessoais definidos', done: chars.some(c=>c.traits)}
+      ]
+    };
+  }
+
+  if(tab==='story'){
+    const hasStory = !!(p.story && p.story.trim().length > 20);
+    return {
+      complete: hasStory,
+      checks:[
+        {label:'História desenvolvida', done: hasStory}
+      ]
+    };
+  }
+
+  return {complete:false, checks:[]};
+}
+
+function checkStageCompletion(){
+  const tab=S.currentDevTab;
+  const result=checkCompletion(tab);
+  if(!result.complete) return;
+
+  // Already confirmed this stage? Don't show again
+  if(S.current[`${tab}Confirmed`]) return;
+
+  // Already showing the card? Don't duplicate
+  if(document.getElementById('completionCard')) return;
+
+  showCompletionCard(tab, result);
+}
+
+function showCompletionCard(tab, result){
+  const area=document.getElementById('chatArea');
+  const tabNames={world:'Mundo',chars:'Personagens',story:'História'};
+  const nextTab={world:'chars',chars:'story',story:'visual'};
+  const nextName={world:'Personagens',chars:'História',story:'Design Visual'};
+
+  const card=document.createElement('div');
+  card.id='completionCard';
+  card.style.cssText=`
+    background:var(--surface);border:1px solid var(--green);border-radius:12px;
+    padding:16px;margin-top:8px;animation:fadeUp 0.3s ease;
+  `;
+  card.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.15);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:1rem;">✓</div>
+      <div>
+        <div style="font-size:0.85rem;font-weight:600;color:var(--white);">Sala 5 — Verificação</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);">${tabNames[tab]} completo</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
+      ${result.checks.map(c=>`
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:18px;height:18px;border-radius:50%;${c.done?'background:rgba(16,185,129,0.15);border:1px solid var(--green);color:var(--green);':'background:var(--surface2);border:1px solid var(--muted2);color:var(--muted2);'}display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;">${c.done?'✓':'✗'}</div>
+          <span style="font-size:0.75rem;color:${c.done?'var(--white)':'var(--muted)'};">${c.label}</span>
+        </div>`).join('')}
+    </div>
+    <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;margin-bottom:12px;">
+      Tudo certo por aqui! Você pode avançar para <strong style="color:var(--cyan);">${nextName[tab]}</strong> ou continuar desenvolvendo este módulo.
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="confirmStage('${tab}')" style="flex:1;padding:10px;background:var(--purple);border:none;border-radius:8px;color:white;font-size:0.8rem;font-weight:600;cursor:pointer;">
+        Avançar para ${nextName[tab]} →
+      </button>
+      <button onclick="dismissCard()" style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:0.8rem;cursor:pointer;">
+        Continuar aqui
+      </button>
+    </div>
+  `;
+  area.appendChild(card);
+  area.scrollTop=area.scrollHeight;
+}
+
+function confirmStage(tab){
+  if(!S.current) return;
+  const nextTab={world:'chars',chars:'story',story:'visual'};
+  const nextTabEl={world:'[data-devtab="chars"]',chars:'[data-devtab="story"]',story:null};
+
+  // Mark as confirmed
+  S.current[`${tab}Confirmed`]=true;
+  S.projects[S.currentIdx]=S.current;
+  saveProjects();
+
+  // Remove card
+  dismissCard();
+
+  if(tab==='story'){
+    // Unlock visual tab
+    const visualTab=document.querySelector('[data-tab="visual"]');
+    if(visualTab) visualTab.classList.remove('locked');
+    toast('Design Visual desbloqueado! 🎨');
+    switchTab('visual', visualTab);
+  } else {
+    // Switch to next dev sub-tab
+    const nextEl=document.querySelector(nextTabEl[tab]);
+    if(nextEl) switchDevTab(nextTab[tab], nextEl);
+  }
+}
+
+function dismissCard(){
+  const card=document.getElementById('completionCard');
+  if(card) card.remove();
 }
 
 async function send(txt){
@@ -1447,6 +1592,7 @@ function saveCharFromForm(){
   syncChar();
   toast('Personagem salvo ✓');
   renderCharSidebar();
+  checkStageCompletion();
 }
 
 // ══════════════════════════════════
@@ -1653,8 +1799,19 @@ function unlockAllForTesting(){
   if(!S.current.chars?.length){
     S.current.chars=[{name:'Kael',personality:'Corajoso, determinado, levemente impulsivo, protetor',design:'Jovem de 17 anos, cabelo preto espetado com mechas roxas, olhos azuis brilhantes, cicatriz diagonal no rosto, roupa preta com detalhes roxos e dourados, capa rasgada',abilities:'Controle de energia etérea, velocidade sobre-humana, barreira protetora',traits:'Medo de perder as pessoas que ama, coça a nuca quando nervoso, nunca desiste mesmo ferido'}];
   }
-  S.current.stage='visual'; S.projects[S.currentIdx]=S.current; saveProjects();
-  renderCharSidebar(); toast('✓ Desbloqueado para teste!');
+  if(!S.current.world) S.current.world='Mundo de fantasia épica com magia e conflito entre forças da luz e trevas';
+  if(!S.current.story) S.current.story='Um jovem descobre seus poderes e precisa salvar seu mundo de uma força das trevas';
+  S.current.worldConfirmed=true;
+  S.current.charsConfirmed=true;
+  S.current.storyConfirmed=true;
+  S.projects[S.currentIdx]=S.current; saveProjects();
+  // Unlock tabs
+  const visualTab=document.querySelector('[data-tab="visual"]');
+  const audioTab=document.querySelector('[data-tab="audio"]');
+  if(visualTab) visualTab.classList.remove('locked');
+  if(audioTab) audioTab.classList.remove('locked');
+  renderCharSidebar();
+  toast('✓ Todas as salas desbloqueadas para teste!');
 }
 
 // ══════════════════════════════════
