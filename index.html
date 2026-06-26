@@ -235,7 +235,67 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sa
 .alink{flex:1;padding:8px;border-radius:7px;font-size:0.7rem;color:var(--white);text-align:center;cursor:pointer;border:1px solid var(--border);transition:all 0.15s;}
 .alink:hover{opacity:0.85;}
 
-/* ══ DRAWER ══ */
+/* ══ DESIGN PANEL ══ */
+.design-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeUp 0.2s ease;}
+.design-modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;}
+.design-modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.design-modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.1em;color:var(--white);}
+.design-modal-close{width:32px;height:32px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1rem;}
+.design-modal-body{flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+@media(max-width:600px){.design-modal-body{grid-template-columns:1fr;}}
+.design-field{display:flex;flex-direction:column;gap:6px;}
+.design-field.full{grid-column:1/-1;}
+.design-field-label{font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);}
+.design-field-input{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;width:100%;transition:border-color 0.2s;}
+.design-field-input:focus{border-color:var(--border2);}
+.design-field-input::placeholder{color:var(--muted2);}
+.design-field-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;width:100%;resize:none;min-height:80px;transition:border-color 0.2s;}
+.design-field-textarea:focus{border-color:var(--border2);}
+.design-field-textarea::placeholder{color:var(--muted2);}
+.design-modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+.design-save-btn{flex:1;padding:11px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:10px;color:white;font-size:0.88rem;font-weight:600;cursor:pointer;}
+.design-cancel-btn{padding:11px 18px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:0.88rem;cursor:pointer;}
+
+/* ══ CHAR SHEET VIEW ══ */
+.sheet-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeUp 0.2s ease;}
+.sheet-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:900px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;}
+.sheet-header{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.sheet-header-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.sheet-header-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.1em;color:var(--white);}
+.sheet-header-role{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);}
+.sheet-close{margin-left:auto;width:32px;height:32px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1rem;flex-shrink:0;}
+.sheet-body{flex:1;overflow-y:auto;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+@media(max-width:600px){.sheet-body{grid-template-columns:1fr;}}
+.sheet-image-col{display:flex;flex-direction:column;gap:10px;}
+.sheet-img-frame{background:var(--surface2);border:1px solid var(--border);border-radius:12px;min-height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.sheet-img-frame img{width:100%;border-radius:12px;}
+.sheet-img-btns{display:flex;gap:6px;}
+.sheet-img-btn{flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--muted);font-size:0.72rem;cursor:pointer;text-align:center;transition:all 0.15s;}
+.sheet-img-btn:hover{border-color:var(--border2);color:var(--white);}
+.sheet-info-col{display:flex;flex-direction:column;gap:10px;}
+.sheet-field{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;}
+.sheet-field-label{font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px;}
+.sheet-field-value{font-size:0.8rem;color:var(--white);line-height:1.6;}
+
+/* ══ MUSIC PLAYER ══ */
+.music-player{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.mp-tracks{display:flex;flex-direction:column;gap:0;}
+.mp-track{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;}
+.mp-track:last-child{border-bottom:none;}
+.mp-track:hover{background:var(--purple-soft);}
+.mp-track.playing{background:var(--cyan-soft);}
+.mp-track-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--purple),#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.mp-track.playing .mp-track-icon{background:linear-gradient(135deg,var(--cyan),var(--purple));}
+.mp-track-info{flex:1;min-width:0;}
+.mp-track-name{font-size:0.8rem;font-weight:500;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mp-track-meta{font-size:0.65rem;color:var(--muted);}
+.mp-track-play{color:var(--muted);font-size:1rem;flex-shrink:0;}
+.mp-track.playing .mp-track-play{color:var(--cyan);}
+.mp-now-playing{padding:14px 16px;border-top:1px solid var(--border);background:var(--surface2);}
+.mp-np-label{font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;}
+.mp-np-name{font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:8px;}
+audio{width:100%;border-radius:8px;height:32px;outline:none;}
+.mp-empty{padding:32px;text-align:center;color:var(--muted2);font-size:0.78rem;line-height:1.6;}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:50;opacity:0;pointer-events:none;transition:opacity 0.25s;backdrop-filter:blur(4px);}
 .ov.open{opacity:1;pointer-events:all;}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(300px,88vw);background:var(--surface);border-left:1px solid var(--border);z-index:51;transform:translateX(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow-y:auto;}
@@ -390,6 +450,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sa
           </div>
           <button class="agenbtn" id="btnGenAudio">🎵 Gerar com IA</button>
           <div id="ares"></div>
+          <div id="tracksList"></div>
         </div>
       </div>
 
@@ -495,6 +556,7 @@ function goTab(id){
   el.classList.add('active');
   document.getElementById('panel-'+id).classList.add('active');
   if(id==='visual') renderVisualTab();
+  if(id==='audio') setTimeout(renderTracksList,100);
 }
 
 document.querySelectorAll('.wtab[data-tab]').forEach(t=>{
@@ -783,7 +845,9 @@ function renderUniverseEditor(){
               <div class="char-card" id="cc${i}">
                 <div class="char-card-header" onclick="toggleChar(${i})">
                   <div class="char-card-avatar">👤</div>
-                  <div class="char-card-name">${c.name} <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">${c.role||''}</span></div>
+                  <div class="char-card-name" style="flex:1;">${c.name} <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">${c.role||''}</span></div>
+                  <button onclick="event.stopPropagation();openDesignModal(${i})" style="padding:3px 8px;background:var(--purple-soft);border:1px solid var(--border);border-radius:5px;color:var(--purple2);font-size:0.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-right:4px;">✏ Design</button>
+                  <button onclick="event.stopPropagation();openSheetModal(${i})" style="padding:3px 8px;background:var(--cyan-soft);border:1px solid var(--border2);border-radius:5px;color:var(--cyan);font-size:0.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-right:6px;">👁 Ficha</button>
                   <div class="char-card-chevron">▼</div>
                 </div>
                 <div class="char-card-body">
@@ -1072,13 +1136,242 @@ document.getElementById('btnGenAudio').addEventListener('click',async()=>{
         <div style="font-size:0.62rem;color:var(--muted2);">Cole esse prompt no Suno ou Udio para gerar gratuitamente.</div>
       </div>`;
     toast('✓ Prompt musical gerado!');
+    renderTracksList();
   }catch(e){document.getElementById('ares').innerHTML='<div class="imgph" style="padding:20px;">Erro ao gerar. Tenta de novo!</div>';}
   btn.disabled=false; btn.textContent='🎵 Gerar com IA';
 });
 
 // ══════════════════════════════════
-// DRAWER
+// DESIGN MODAL
 // ══════════════════════════════════
+function openDesignModal(i){
+  const char=S.current?.chars?.[i];
+  if(!char) return;
+  const existing=document.getElementById('designModal');
+  if(existing) existing.remove();
+
+  const m=document.createElement('div');
+  m.id='designModal'; m.className='design-modal';
+  m.innerHTML=`
+    <div class="design-modal-box">
+      <div class="design-modal-header">
+        <div class="design-modal-title">✏ Design — ${char.name}</div>
+        <div class="design-modal-close" onclick="closeDesignModal()">✕</div>
+      </div>
+      <div class="design-modal-body">
+        <div class="design-field full">
+          <div class="design-field-label">Nome</div>
+          <input class="design-field-input" id="dm-name" value="${char.name||''}" placeholder="Nome do personagem"/>
+        </div>
+        <div class="design-field">
+          <div class="design-field-label">Função na história</div>
+          <input class="design-field-input" id="dm-role" value="${char.role||''}" placeholder="Protagonista, Antagonista..."/>
+        </div>
+        <div class="design-field">
+          <div class="design-field-label">Idade / Altura</div>
+          <input class="design-field-input" id="dm-age" value="${char.age||''}" placeholder="Ex: 17 anos, 1.75m"/>
+        </div>
+        <div class="design-field full">
+          <div class="design-field-label">Design Físico</div>
+          <textarea class="design-field-textarea" id="dm-design" placeholder="Descreva aparência física: cabelo, olhos, corpo, traços marcantes...">${char.design||''}</textarea>
+        </div>
+        <div class="design-field full">
+          <div class="design-field-label">Roupa / Estilo Visual</div>
+          <textarea class="design-field-textarea" id="dm-outfit" placeholder="Descreva a roupa, cores, acessórios, estilo...">${char.outfit||''}</textarea>
+        </div>
+        <div class="design-field full">
+          <div class="design-field-label">Personalidade</div>
+          <textarea class="design-field-textarea" id="dm-personality" placeholder="Como age, pensa, seus valores e fraquezas...">${char.personality||''}</textarea>
+        </div>
+        <div class="design-field full">
+          <div class="design-field-label">Habilidades Especiais</div>
+          <textarea class="design-field-textarea" id="dm-abilities" placeholder="Poderes, talentos únicos...">${char.abilities||''}</textarea>
+        </div>
+        <div class="design-field full">
+          <div class="design-field-label">Traços Pessoais</div>
+          <textarea class="design-field-textarea" id="dm-traits" placeholder="Manias, tiques, hábitos únicos...">${char.traits||''}</textarea>
+        </div>
+        <div class="design-field full">
+          <div class="design-field-label">Backstory</div>
+          <textarea class="design-field-textarea" id="dm-backstory" placeholder="História de fundo do personagem...">${char.backstory||''}</textarea>
+        </div>
+      </div>
+      <div class="design-modal-footer">
+        <button class="design-save-btn" onclick="saveDesignModal(${i})">✓ Salvar Design</button>
+        <button class="design-cancel-btn" onclick="closeDesignModal()">Cancelar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',e=>{if(e.target===m) closeDesignModal();});
+}
+
+function saveDesignModal(i){
+  if(!S.current?.chars?.[i]) return;
+  const c=S.current.chars[i];
+  c.name=document.getElementById('dm-name').value.trim()||c.name;
+  c.role=document.getElementById('dm-role').value.trim();
+  c.age=document.getElementById('dm-age').value.trim();
+  c.design=document.getElementById('dm-design').value.trim();
+  c.outfit=document.getElementById('dm-outfit').value.trim();
+  c.personality=document.getElementById('dm-personality').value.trim();
+  c.abilities=document.getElementById('dm-abilities').value.trim();
+  c.traits=document.getElementById('dm-traits').value.trim();
+  c.backstory=document.getElementById('dm-backstory').value.trim();
+  S.projects[S.currentIdx]=S.current;
+  saveProjects();
+  closeDesignModal();
+  renderUniverseEditor();
+  toast('Design salvo ✓');
+}
+
+function closeDesignModal(){
+  document.getElementById('designModal')?.remove();
+}
+
+// ══════════════════════════════════
+// SHEET MODAL
+// ══════════════════════════════════
+function openSheetModal(i){
+  const char=S.current?.chars?.[i];
+  if(!char) return;
+  const ficha=S.current.fichas?.[char.name]||{};
+  const existing=document.getElementById('sheetModal');
+  if(existing) existing.remove();
+
+  const m=document.createElement('div');
+  m.id='sheetModal'; m.className='sheet-modal';
+
+  const views=['front','back','detail'];
+  const viewLabels={front:'Frente',back:'Costas',detail:'Detalhes'};
+  const currentView=views.find(v=>ficha[v])||null;
+
+  m.innerHTML=`
+    <div class="sheet-box">
+      <div class="sheet-header">
+        <div class="sheet-header-icon">👤</div>
+        <div>
+          <div class="sheet-header-name">${char.name}</div>
+          <div class="sheet-header-role">${char.role||'Personagem'}</div>
+        </div>
+        <div class="sheet-close" onclick="closeSheetModal()">✕</div>
+      </div>
+      <div class="sheet-body">
+        <div class="sheet-image-col">
+          <div class="sheet-img-frame" id="sheetImgFrame">
+            ${currentView
+              ? `<img src="${ficha[currentView]}" alt="${char.name}">`
+              : `<div class="imgph"><div style="font-size:2rem;">🎨</div><div>Gere uma imagem no Design Visual</div></div>`}
+          </div>
+          ${Object.keys(ficha).length>0?`
+          <div class="sheet-img-btns">
+            ${views.filter(v=>ficha[v]).map(v=>`
+              <div class="sheet-img-btn" onclick="document.getElementById('sheetImgFrame').innerHTML='<img src=\\'${ficha[v]}\\' alt=\\'${char.name}\\'>';">${viewLabels[v]}</div>
+            `).join('')}
+          </div>`:''}
+        </div>
+        <div class="sheet-info-col">
+          ${char.age?`<div class="sheet-field"><div class="sheet-field-label">Idade / Altura</div><div class="sheet-field-value">${char.age}</div></div>`:''}
+          <div class="sheet-field"><div class="sheet-field-label">Design Físico</div><div class="sheet-field-value">${char.design||'Não definido'}</div></div>
+          ${char.outfit?`<div class="sheet-field"><div class="sheet-field-label">Roupa / Estilo</div><div class="sheet-field-value">${char.outfit}</div></div>`:''}
+          <div class="sheet-field"><div class="sheet-field-label">Personalidade</div><div class="sheet-field-value">${char.personality||'Não definido'}</div></div>
+          <div class="sheet-field"><div class="sheet-field-label">Habilidades</div><div class="sheet-field-value">${char.abilities||'Não definido'}</div></div>
+          <div class="sheet-field"><div class="sheet-field-label">Traços Pessoais</div><div class="sheet-field-value">${char.traits||'Não definido'}</div></div>
+          ${char.backstory?`<div class="sheet-field"><div class="sheet-field-label">Backstory</div><div class="sheet-field-value">${char.backstory}</div></div>`:''}
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',e=>{if(e.target===m) closeSheetModal();});
+}
+
+function closeSheetModal(){
+  document.getElementById('sheetModal')?.remove();
+}
+
+// ══════════════════════════════════
+// MUSIC PLAYER
+// ══════════════════════════════════
+let currentAudio=null;
+
+function renderTracksList(){
+  const el=document.getElementById('tracksList');
+  if(!el||!S.current?.tracks?.length) return;
+
+  el.innerHTML=`
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;">Faixas Geradas</div>
+    <div class="music-player">
+      <div class="mp-tracks" id="mpTracks">
+        ${S.current.tracks.map((t,i)=>`
+          <div class="mp-track" id="mpt${i}" onclick="playTrack(${i})">
+            <div class="mp-track-icon">${{Abertura:'🎵',Trilha:'🎼',Encerramento:'🌙',Créditos:'✨'}[t.type]||'🎵'}</div>
+            <div class="mp-track-info">
+              <div class="mp-track-name">${t.name}</div>
+              <div class="mp-track-meta">${t.style} · ${t.date}</div>
+            </div>
+            <div class="mp-track-play">▶</div>
+          </div>`).join('')}
+      </div>
+      <div class="mp-now-playing" id="mpNowPlaying" style="display:none;">
+        <div class="mp-np-label">Tocando agora</div>
+        <div class="mp-np-name" id="mpNpName"></div>
+        <audio id="mpAudio" controls onended="stopTrack()"></audio>
+      </div>
+    </div>`;
+}
+
+async function playTrack(i){
+  const track=S.current?.tracks?.[i];
+  if(!track) return;
+
+  // Mark as playing
+  document.querySelectorAll('.mp-track').forEach(t=>t.classList.remove('playing'));
+  document.getElementById('mpt'+i)?.classList.add('playing');
+
+  const np=document.getElementById('mpNowPlaying');
+  const npName=document.getElementById('mpNpName');
+  const audio=document.getElementById('mpAudio');
+  np.style.display='block';
+  npName.textContent=track.name;
+
+  // If track has a real audio URL, play it
+  if(track.audioUrl){
+    audio.src=track.audioUrl;
+    audio.play().catch(()=>{});
+    return;
+  }
+
+  // Otherwise search Pixabay for matching music
+  npName.textContent=`${track.name} — buscando...`;
+  try{
+    const mood=track.style==='Orquestral'?'epic':
+                track.style==='Lo-fi'?'calm':
+                track.style==='J-Rock'?'rock':
+                track.style==='Eletrônico'?'electronic':'cinematic';
+
+    // Pixabay music search — free, no auth needed for basic search
+    const r=await fetch(`https://pixabay.com/api/music/?key=46521127-9f91bb98c4f8d2b3e80e6a4a6&q=${mood}&per_page=5&category=cinematic`);
+    const d=await r.json();
+    if(d?.hits?.length){
+      const hit=d.hits[Math.floor(Math.random()*Math.min(3,d.hits.length))];
+      track.audioUrl=hit.audio;
+      S.projects[S.currentIdx]=S.current;
+      saveProjects();
+      audio.src=hit.audio;
+      audio.play().catch(()=>{});
+      npName.textContent=track.name;
+    } else {
+      npName.textContent=`${track.name} — use o link abaixo`;
+      audio.src='';
+      np.innerHTML+=`<a href="${track.sunoLink||`https://suno.com`}" target="_blank" style="font-size:0.72rem;color:var(--cyan);text-decoration:none;">🔗 Abrir no Suno →</a>`;
+    }
+  }catch(e){
+    npName.textContent=`${track.name} — erro ao buscar`;
+  }
+}
+
+function stopTrack(){
+  document.querySelectorAll('.mp-track').forEach(t=>t.classList.remove('playing'));
+}
 function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('dov').classList.add('open');document.getElementById('cfgModel').value=S.model;}
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('dov').classList.remove('open');}
 document.getElementById('dov').addEventListener('click',closeDrawer);
