@@ -189,7 +189,14 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sa
 .refine-send:hover{background:var(--purple2);}
 
 /* ══ VISUAL PANEL ══ */
-.vis-panel{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.vis-panel{flex:1;overflow:hidden;padding:0;display:flex;flex-direction:column;}
+.vis-inner{display:flex;flex:1;overflow:hidden;gap:0;}
+.vis-controls{width:340px;flex-shrink:0;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px;border-right:1px solid var(--border);scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.vis-preview{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+@media(max-width:768px){
+  .vis-inner{flex-direction:column;}
+  .vis-controls{width:100%;border-right:none;border-bottom:1px solid var(--border);}
+}
 .vlabel{font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted2);margin-bottom:5px;}
 .char-selector{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
 .char-selector::-webkit-scrollbar{display:none;}
@@ -404,26 +411,45 @@ audio{width:100%;border-radius:8px;height:32px;outline:none;}
       <!-- DESIGN VISUAL -->
       <div class="panel" id="panel-visual">
         <div class="vis-panel">
-          <div><div class="vlabel">Personagem</div><div class="char-selector" id="charSelector"></div></div>
-          <div><div class="vlabel">Estilo Visual</div>
-            <div class="style-grid">
-              <div class="scard active" data-style="modern"><div class="scard-icon">✨</div><div class="scard-name">Moderno</div></div>
-              <div class="scard" data-style="90s"><div class="scard-icon">📼</div><div class="scard-name">Anos 90</div></div>
-              <div class="scard" data-style="shonen"><div class="scard-icon">⚡</div><div class="scard-name">Shonen</div></div>
-              <div class="scard" data-style="chibi"><div class="scard-icon">🌸</div><div class="scard-name">Chibi</div></div>
-              <div class="scard" data-style="seinen"><div class="scard-icon">🗡</div><div class="scard-name">Seinen</div></div>
+          <div class="vis-inner">
+            <!-- LEFT: Controls -->
+            <div class="vis-controls">
+              <div><div class="vlabel">Personagem</div><div class="char-selector" id="charSelector"></div></div>
+              <div><div class="vlabel">Estilo Visual</div>
+                <div class="style-grid">
+                  <div class="scard active" data-style="modern"><div class="scard-icon">✨</div><div class="scard-name">Moderno</div></div>
+                  <div class="scard" data-style="90s"><div class="scard-icon">📼</div><div class="scard-name">Anos 90</div></div>
+                  <div class="scard" data-style="shonen"><div class="scard-icon">⚡</div><div class="scard-name">Shonen</div></div>
+                  <div class="scard" data-style="chibi"><div class="scard-icon">🌸</div><div class="scard-name">Chibi</div></div>
+                  <div class="scard" data-style="seinen"><div class="scard-icon">🗡</div><div class="scard-name">Seinen</div></div>
+                </div>
+              </div>
+              <div><div class="vlabel">Vista</div>
+                <div class="vtabs">
+                  <div class="vtab active" data-view="front">Frente</div>
+                  <div class="vtab" data-view="back">Costas</div>
+                  <div class="vtab" data-view="detail">Detalhes</div>
+                </div>
+              </div>
+              <div class="prompt-box"><div class="prompt-label">Prompt (editável)</div><textarea id="promptBox" placeholder="Será gerado automaticamente..."></textarea></div>
+              <button class="genbtn" id="btnGenImg">🎨 Gerar Imagem</button>
+            </div>
+            <!-- RIGHT: Preview -->
+            <div class="vis-preview">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px;">Prévia</div>
+              <div class="imgframe" id="imgframe" style="flex:1;min-height:400px;">
+                <div class="imgph"><div style="font-size:2.5rem;">🎨</div><div>Selecione um personagem<br>e gere a imagem</div></div>
+              </div>
+              <!-- Ficha tabs if multiple views exist -->
+              <div id="fichaViewBtns" style="display:none;">
+                <div class="vtabs">
+                  <div class="vtab active" onclick="showFichaView('front',this)">Frente</div>
+                  <div class="vtab" onclick="showFichaView('back',this)">Costas</div>
+                  <div class="vtab" onclick="showFichaView('detail',this)">Detalhes</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div><div class="vlabel">Vista</div>
-            <div class="vtabs">
-              <div class="vtab active" data-view="front">Frente</div>
-              <div class="vtab" data-view="back">Costas</div>
-              <div class="vtab" data-view="detail">Detalhes</div>
-            </div>
-          </div>
-          <div class="prompt-box"><div class="prompt-label">Prompt (editável)</div><textarea id="promptBox" placeholder="Será gerado automaticamente..."></textarea></div>
-          <button class="genbtn" id="btnGenImg">🎨 Gerar Imagem</button>
-          <div class="imgframe" id="imgframe"><div class="imgph"><div style="font-size:2rem;">🎨</div><div>Selecione um personagem e gere</div></div></div>
         </div>
       </div>
 
@@ -717,33 +743,36 @@ async function generateUniverse(surprise){
   try{
     const systemPrompt=`Você é AURION, criador de universos de anime. Com base na ideia do usuário, gere um universo completo de anime em português.
 
-Retorne APENAS um JSON válido neste formato exato (sem markdown, sem explicação):
+REGRAS CRÍTICAS:
+- Todos os personagens DEVEM ter nomes próprios reais (ex: Kael, Yuki, Raven) — NUNCA use "Protagonista", "Antagonista", "null", "Personagem" ou similares como nome
+- Gere EXATAMENTE 3 personagens com nomes únicos e criativos
+- Todos os campos devem ser preenchidos com conteúdo real, nunca null ou vazio
+
+Retorne APENAS um JSON válido neste formato exato (sem markdown, sem explicação, sem texto fora do JSON):
 {
   "world": {
     "name": "Nome do Mundo",
-    "description": "Descrição detalhada do mundo, cenário, regras e atmosfera (2-3 parágrafos)",
-    "tone": "Tom da história (épico, melancólico, aventureiro, etc)"
+    "description": "Descrição detalhada do mundo (2-3 parágrafos)",
+    "tone": "Tom da história"
   },
   "characters": [
     {
-      "name": "Nome",
-      "role": "Protagonista/Antagonista/Suporte",
-      "design": "Descrição física detalhada: altura, corpo, cabelo, olhos, roupa, traços marcantes",
-      "personality": "Como age, pensa, seus valores e fraquezas",
+      "name": "Nome próprio criativo",
+      "role": "Protagonista",
+      "design": "Descrição física detalhada: altura, cabelo, olhos, roupa, traços marcantes",
+      "personality": "Como age, pensa, valores e fraquezas",
       "abilities": "Poderes ou habilidades especiais",
-      "traits": "Manias, tiques, hábitos e traços pessoais únicos",
+      "traits": "Manias, tiques e hábitos únicos",
       "backstory": "História de fundo resumida"
     }
   ],
   "story": {
-    "premise": "Premissa principal da história",
+    "premise": "Premissa principal",
     "conflict": "Conflito central",
     "arcs": ["Arco 1", "Arco 2", "Arco 3"],
-    "ending": "Tipo de final pretendido"
+    "ending": "Tipo de final"
   }
-}
-
-Crie pelo menos 3 personagens. Seja criativo e detalhado.`;
+}`;
 
     const userMsg=surprise
       ? 'Crie um universo de anime surpreendente e único, com elementos que nunca foram vistos antes.'
@@ -770,7 +799,7 @@ Crie pelo menos 3 personagens. Seja criativo e detalhado.`;
 
     // Save to project
     S.current.world=universe.world;
-    S.current.chars=universe.characters;
+    S.current.chars=cleanChars(universe.characters);
     S.current.story=universe.story;
     S.current.idea=idea;
     S.projects[S.currentIdx]=S.current;
@@ -800,7 +829,7 @@ function renderUniverseEditor(){
   const p=S.current;
   const w=p.world||{};
   const s=p.story||{};
-  const chars=p.chars||[];
+  const chars=cleanChars(p.chars);
 
   dp.innerHTML=`
     <div class="universe-editor" id="ue">
@@ -837,7 +866,10 @@ function renderUniverseEditor(){
         <div class="ue-section-header">
           <span class="ue-section-icon">👥</span>
           <span class="ue-section-title">Personagens (${chars.length})</span>
-          <button class="ue-edit-btn" onclick="requestEdit('chars')">Pedir ajuste</button>
+          <div style="display:flex;gap:6px;">
+            <button class="ue-edit-btn" onclick="addNewChar()">+ Novo</button>
+            <button class="ue-edit-btn" onclick="requestEdit('chars')">Pedir ajuste</button>
+          </div>
         </div>
         <div class="ue-content">
           <div class="char-cards" id="charCards">
@@ -847,7 +879,8 @@ function renderUniverseEditor(){
                   <div class="char-card-avatar">👤</div>
                   <div class="char-card-name" style="flex:1;">${c.name} <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">${c.role||''}</span></div>
                   <button onclick="event.stopPropagation();openDesignModal(${i})" style="padding:3px 8px;background:var(--purple-soft);border:1px solid var(--border);border-radius:5px;color:var(--purple2);font-size:0.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-right:4px;">✏ Design</button>
-                  <button onclick="event.stopPropagation();openSheetModal(${i})" style="padding:3px 8px;background:var(--cyan-soft);border:1px solid var(--border2);border-radius:5px;color:var(--cyan);font-size:0.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-right:6px;">👁 Ficha</button>
+                  <button onclick="event.stopPropagation();openSheetModal(${i})" style="padding:3px 8px;background:var(--cyan-soft);border:1px solid var(--border2);border-radius:5px;color:var(--cyan);font-size:0.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-right:4px;">👁 Ficha</button>
+                  <button onclick="event.stopPropagation();deleteChar(${i})" style="padding:3px 8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:5px;color:var(--red);font-size:0.58rem;font-family:'JetBrains Mono',monospace;cursor:pointer;margin-right:6px;">✕</button>
                   <div class="char-card-chevron">▼</div>
                 </div>
                 <div class="char-card-body">
@@ -906,9 +939,41 @@ function renderUniverseEditor(){
   document.getElementById('refineInp')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendRefine();}});
 }
 
-function toggleChar(i){
-  const el=document.getElementById('cc'+i);
-  el.classList.toggle('expanded');
+function cleanChars(chars){
+  if(!chars?.length) return [];
+  const invalid=['null','undefined','protagonista','antagonista','suporte','personagem','character','nome','name',''];
+  return chars.filter(c=>{
+    if(!c||typeof c!=='object') return false;
+    const name=(c.name||'').toLowerCase().trim();
+    if(!name||name.length<2) return false;
+    if(invalid.includes(name)) return false;
+    if(name.includes('null')||name.includes('undefined')) return false;
+    return true;
+  });
+}
+
+function deleteChar(i){
+  if(!S.current?.chars) return;
+  const char=S.current.chars[i];
+  if(!confirm(`Excluir "${char?.name||'personagem'}"?`)) return;
+  S.current.chars.splice(i,1);
+  // Also remove fichas for this char
+  if(S.current.fichas?.[char?.name]) delete S.current.fichas[char.name];
+  S.projects[S.currentIdx]=S.current;
+  saveProjects();
+  renderUniverseEditor();
+  toast('Personagem excluído');
+}
+
+function addNewChar(){
+  if(!S.current) return;
+  if(!S.current.chars) S.current.chars=[];
+  S.current.chars.push({name:'Novo Personagem',role:'',design:'',personality:'',abilities:'',traits:'',backstory:''});
+  S.projects[S.currentIdx]=S.current;
+  saveProjects();
+  renderUniverseEditor();
+  // Auto open the new char modal
+  setTimeout(()=>openDesignModal(S.current.chars.length-1), 100);
 }
 
 function saveEdit(section,field,value){
@@ -1040,9 +1105,9 @@ document.querySelectorAll('.scard').forEach(el=>{
     document.getElementById('promptBox').value='';
   });
 });
-document.querySelectorAll('.vtab').forEach(el=>{
+document.querySelectorAll('.vis-controls .vtab').forEach(el=>{
   el.addEventListener('click',()=>{
-    document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.vis-controls .vtab').forEach(t=>t.classList.remove('active'));
     el.classList.add('active');
     S.VS.view=el.getAttribute('data-view');
     document.getElementById('promptBox').value='';
@@ -1073,7 +1138,12 @@ document.getElementById('btnGenImg').addEventListener('click',async()=>{
       if(!S.current.fichas[S.VS.char.name]) S.current.fichas[S.VS.char.name]={};
       S.current.fichas[S.VS.char.name][S.VS.view]=d2.imageUrl;
       S.projects[S.currentIdx]=S.current; saveProjects();
-      frame.innerHTML=`<img src="${d2.imageUrl}" alt="${S.VS.char.name}">`;
+      frame.innerHTML=`<img src="${d2.imageUrl}" alt="${S.VS.char.name}" style="width:100%;height:100%;object-fit:contain;">`;
+      const fichaBtn=document.getElementById('fichaViewBtns');
+      if(fichaBtn){
+        const viewCount=Object.keys(S.current.fichas[S.VS.char.name]).length;
+        fichaBtn.style.display=viewCount>1?'block':'none';
+      }
       btn.disabled=false; btn.innerHTML='🎨 Gerar Imagem';
       toast('✓ Imagem gerada!');
     };
@@ -1371,6 +1441,15 @@ async function playTrack(i){
 
 function stopTrack(){
   document.querySelectorAll('.mp-track').forEach(t=>t.classList.remove('playing'));
+}
+
+function showFichaView(view, el){
+  if(!S.VS.char||!S.current) return;
+  const ficha=S.current.fichas?.[S.VS.char.name]||{};
+  document.querySelectorAll('#fichaViewBtns .vtab').forEach(t=>t.classList.remove('active'));
+  el?.classList.add('active');
+  const frame=document.getElementById('imgframe');
+  if(ficha[view]) frame.innerHTML=`<img src="${ficha[view]}" alt="${S.VS.char.name}" style="width:100%;height:100%;object-fit:contain;">`;
 }
 function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('dov').classList.add('open');document.getElementById('cfgModel').value=S.model;}
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('dov').classList.remove('open');}
