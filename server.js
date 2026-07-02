@@ -56,17 +56,17 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// ── ROTA DE GERAÇÃO DE IMAGEM (Pollinations via redirect) ──
+// ── ROTA DE GERAÇÃO DE IMAGEM (Pollinations com negative prompt) ──
 app.post("/generate-image", async (req, res) => {
-  const { prompt } = req.body;
+  const { prompt, negativePrompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "prompt é obrigatório" });
 
   try {
     const encoded = encodeURIComponent(prompt);
-    const seed = Math.floor(Math.random() * 99999);
-    // width/height closer to square reduces anatomy distortion on free model
-    // nofeed=true avoids it appearing in public feed
-    const url = `https://image.pollinations.ai/prompt/${encoded}?width=720&height=960&model=flux&nologo=true&nofeed=true&enhance=true&seed=${seed}`;
+    const neg = negativePrompt ? `&negative=${encodeURIComponent(negativePrompt)}` : "";
+    const seed = Math.floor(Math.random() * 999999);
+    // Use flux-realism for better anatomy, enhance=true for upscaling
+    const url = `https://image.pollinations.ai/prompt/${encoded}?width=768&height=1024&model=flux-realism&nologo=true&nofeed=true&enhance=true&seed=${seed}${neg}`;
     res.json({ imageUrl: url });
   } catch (err) {
     res.status(500).json({ error: "Erro ao gerar URL de imagem" });
@@ -132,34 +132,49 @@ app.post("/generate-music", async (req, res) => {
   }
 });
 
-// ── ROTA DE PROMPT DE IMAGEM ──
+// ── ROTA DE PROMPT DE IMAGEM (Engenharia de prompt profissional) ──
 app.post("/build-prompt", async (req, res) => {
   const { charData, style, view } = req.body;
 
+  // Style tokens — specific artist/series references get better results
   const styleMap = {
-    "90s":    "90s anime art style, cel shaded",
-    "modern": "modern anime art style, detailed",
-    "chibi":  "chibi anime style, kawaii, big eyes",
-    "shonen": "shonen anime style, bold lines",
-    "seinen": "seinen anime style, realistic proportions"
+    "modern": "masterpiece, best quality, ultra-detailed, modern anime style, (Demon Slayer:1.2), (Jujutsu Kaisen:1.1), vibrant colors, sharp lineart, cel shading",
+    "90s":    "masterpiece, best quality, 1990s anime style, (Cowboy Bebop:1.1), (Neon Genesis Evangelion:1.1), cel shaded, retro anime, film grain, soft colors",
+    "shonen": "masterpiece, best quality, shonen anime style, (Naruto:1.1), (My Hero Academia:1.1), dynamic pose, bold outlines, energetic, vivid colors",
+    "chibi":  "masterpiece, best quality, chibi anime style, super deformed, big round eyes, small body, cute, kawaii, pastel colors, soft shading",
+    "seinen": "masterpiece, best quality, seinen manga anime style, (Berserk:1.1), realistic proportions, detailed anatomy, dark atmosphere, mature aesthetic"
   };
 
+  // View tokens
   const viewMap = {
-    front:  "front view, standing pose",
-    back:   "back view, standing pose",
-    detail: "portrait, face closeup"
+    front:  "full body, front view, standing, arms at sides, looking at viewer",
+    back:   "full body, back view, standing, seen from behind",
+    detail: "upper body portrait, face focus, detailed face, expressive eyes, close-up"
   };
+
+  // Negative prompt — things to avoid
+  const negativePrompt = "worst quality, low quality, normal quality, lowres, blurry, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutant hands, poorly drawn hands, poorly drawn face, mutation, deformed, extra limbs, extra arms, extra legs, missing limbs, disfigured, fused fingers, too many fingers, long neck, cross-eyed, cloned face, nsfw";
 
   const styleDesc = styleMap[style] || styleMap["modern"];
   const viewDesc  = viewMap[view]   || viewMap["front"];
 
-  // Extract ONLY the pure visual description, strip anything non-visual
+  // Extract only visual elements from design
   const design = (charData.design || "anime character").trim();
+  const outfit = charData.outfit ? `, ${charData.outfit.trim()}` : "";
+  const name   = charData.name   ? `1girl, ` : ""; // helps model understand it's a single character
 
-  // Short, clean, high-signal prompt — long prompts confuse the free model
-  const directPrompt = `anime character, ${design}, ${viewDesc}, ${styleDesc}, single character, solo, simple white background, full body, symmetrical anatomy, two arms, two legs, five fingers each hand, sharp focus, high detail, masterpiece`;
+  // Determine gender hint from design text
+  const designLower = design.toLowerCase();
+  const genderHint = designLower.includes("mulher") || designLower.includes("garota") || designLower.includes("female") || designLower.includes("girl")
+    ? "1girl, " : designLower.includes("homem") || designLower.includes("garoto") || designLower.includes("male") || designLower.includes("boy")
+    ? "1boy, " : "1character, ";
 
-  res.json({ prompt: directPrompt });
+  const finalPrompt = `${styleDesc}, ${genderHint}${design}${outfit}, ${viewDesc}, solo, white background, character sheet, professional illustration`;
+
+  res.json({
+    prompt: finalPrompt,
+    negativePrompt
+  });
 });
 
 const PORT = process.env.PORT || 3000;
