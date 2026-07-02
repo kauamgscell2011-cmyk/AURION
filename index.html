@@ -372,7 +372,7 @@ audio{width:100%;border-radius:8px;height:32px;outline:none;}
         <div class="wtab active" data-tab="home">🏠 Início</div>
         <div class="wtab" data-tab="dev">📝 Desenvolvimento</div>
         <div class="wtab locked" data-tab="visual">🎨 Design Visual</div>
-        <div class="wtab locked" data-tab="audio">🎵 Áudio</div>
+        <div class="wtab locked" data-tab="audio">🎵 Áudio <span style="font-size:0.55rem;opacity:0.6;">(em breve)</span></div>
         <div class="wtab locked" data-tab="final">🎬 Final</div>
       </div>
 
@@ -700,6 +700,7 @@ function renderDevPanel(){
           <button class="idea-btn secondary" id="btnSurprise">🎲 Me Surpreenda</button>
         </div>
       </div>`;
+    // Attach events AFTER innerHTML is set
     document.getElementById('btnGenerate').addEventListener('click',()=>generateUniverse(false));
     document.getElementById('btnSurprise').addEventListener('click',()=>generateUniverse(true));
   } else {
@@ -1122,14 +1123,16 @@ document.getElementById('btnGenImg').addEventListener('click',async()=>{
   frame.innerHTML='<div class="imgph"><div class="gen-spinner"></div><div style="margin-top:8px;">Gerando... aguarde ☕</div></div>';
   try{
     let prompt=document.getElementById('promptBox').value.trim();
+    let negativePrompt='';
     if(!prompt){
       const r1=await fetch(`${BACKEND}/build-prompt`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({charData:S.VS.char,style:S.VS.style,view:S.VS.view})});
       const d1=await r1.json();
       if(!r1.ok) throw new Error(d1.error);
       prompt=d1.prompt;
+      negativePrompt=d1.negativePrompt||'';
       document.getElementById('promptBox').value=prompt;
     }
-    const r2=await fetch(`${BACKEND}/generate-image`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const r2=await fetch(`${BACKEND}/generate-image`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,negativePrompt})});
     const d2=await r2.json();
     if(!r2.ok) throw new Error(d2.error);
     const img=new Image();
